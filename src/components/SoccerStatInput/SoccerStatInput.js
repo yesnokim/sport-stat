@@ -1,4 +1,4 @@
-import { useReducer } from "react";
+import { useReducer, useState } from "react";
 import ss from "./SoccerStatInput.module.scss";
 
 // 초기 상태 정의
@@ -18,6 +18,7 @@ const initialState = {
     shotOnTarget: 0,
     turnover: 0,
     intercept: 0,
+    pressure: 0,
 };
 
 // reducer 함수 정의
@@ -68,6 +69,11 @@ function reducer(state, action) {
         case 'DECREMENT_FAILED_DRIBBLE':
             return { ...state, failedDribble: state.failedDribble - 1, turnover: state.turnover - 1 };
 
+        case 'INCREMENT_MISTAKE':
+            return { ...state, turnover: state.turnover + 1 };
+        case 'DECREMENT_MISTAKE':
+            return { ...state, turnover: state.turnover - 1 };
+
         case 'INCREMENT_SUCCESSFUL_DUEL':
             return { ...state, successfulDuel: state.successfulDuel + 1 };
         case 'DECREMENT_SUCCESSFUL_DUEL':
@@ -102,6 +108,11 @@ function reducer(state, action) {
 const SoccerStatInput = () => {
 
     const [state, dispatch] = useReducer(reducer, initialState);
+    const [title, setTitle] = useState('');
+
+    const handleChange = (e) => {
+        setTitle(e.target.value);
+    };
 
     // 통계 UI 항목 컴포넌트
     const StatItem = ({ title, stateKey, incrementType, decrementType }) => (
@@ -130,8 +141,17 @@ const SoccerStatInput = () => {
 
     return (
         <div className={ss.bg}>
+            <div className={ss.header}>
+                <input
+                    style={{ width: "300px" }}
+                    type="text"
+                    value={title}
+                    onChange={handleChange}
+                    placeholder="ex)2024.10.04. 대구OO. 전반. 20분."
+                />
+            </div>
             <div className={ss.dashboard}>
-                <h3>통계</h3>
+                <h3>{title} 통계</h3>
                 <div className={ss.value_group}>
                     <DashboardItem title="볼 터치수" value={ballTouches} />
                     <DashboardItem title="패스 시도" value={passTries} />
@@ -139,13 +159,15 @@ const SoccerStatInput = () => {
                     <DashboardItem title="키패스" value={state["keyPass"]} />
                     <DashboardItem title="어시스트" value={state["assist"]} />
                     <DashboardItem title="슛" value={state["shot"]} />
-                    <DashboardItem title="턴 오버" value={state["turnover"]} isBad={true} />
+                    <DashboardItem title="골" value={state["goal"]} />
                     <DashboardItem title="인터셉트" value={state["intercept"]} />
+                    <DashboardItem title="적극성" value={state["intercept"] + state["successfulDuel"] + state["failedDuel"]} />
+                    <DashboardItem title="턴 오버" value={state["turnover"]} isBad={true} />
                 </div>
             </div>
             <div className={ss.controller}>
                 <div className={ss.stat_group}>
-                    <h3>PASS</h3>
+                    <h3>패스</h3>
                     <StatItem title="Forward Passes" stateKey="forwardPass" incrementType="INCREMENT_FORWARD_PASS" decrementType="DECREMENT_FORWARD_PASS" />
                     <StatItem title="Side Passes" stateKey="sidePass" incrementType="INCREMENT_SIDE_PASS" decrementType="DECREMENT_SIDE_PASS" />
                     <StatItem title="Back Passes" stateKey="backPass" incrementType="INCREMENT_BACK_PASS" decrementType="DECREMENT_BACK_PASS" />
@@ -161,7 +183,7 @@ const SoccerStatInput = () => {
 
                 </div>
                 <div className={ss.stat_group}>
-                    <h3>DRIBBLE</h3>
+                    <h3>드리블</h3>
                     <StatItem title="Success Dribbles" stateKey="dribble" incrementType="INCREMENT_DRIBBLE" decrementType="DECREMENT_DRIBBLE" />
                     <StatItem title="Failed Dribbles" stateKey="failedDribble" incrementType="INCREMENT_FAILED_DRIBBLE" decrementType="DECREMENT_FAILED_DRIBBLE" />
                 </div>
@@ -171,6 +193,7 @@ const SoccerStatInput = () => {
                     <StatItem title="Successful Duels" stateKey="successfulDuel"
                         incrementType="INCREMENT_SUCCESSFUL_DUEL" decrementType="DECREMENT_SUCCESSFUL_DUEL" />
                     <StatItem title="Failed Duels" stateKey="failedDuel" incrementType="INCREMENT_FAILED_DUEL" decrementType="DECREMENT_FAILED_DUEL" />
+                    <StatItem title="Mistake" stateKey="turnover" incrementType="INCREMENT_TURNOVER" decrementType="DECREMENT_TURNOVER" />
                 </div>
             </div>
         </div >

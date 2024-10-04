@@ -3,13 +3,12 @@
 
         .value_group {
 
-            display: flex;
-            flex-wrap: wrap; // 여러 줄을 허용하기 위해 wrap 적용
-            justify-content: space-between; // 항목 간의 공간을 균등하게 분배
+            display: grid;
+            grid-template-columns: repeat(5, 1fr); // 5개의 열을 동일한 너비로 설정
+            gap: 10px; // 아이템 간 간격 설정
             padding: 20px;
 
             .item {
-                width: calc(100% / 5 - 10px); // 6개의 항목을 한 줄에 맞추기 위한 너비 계산
                 border: 1px solid #ccc;
                 padding: 10px;
                 margin-bottom: 20px; // 항목 간의 간격을 추가
