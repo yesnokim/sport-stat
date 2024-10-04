@@ -69,9 +69,9 @@ function reducer(state, action) {
         case 'DECREMENT_FAILED_DRIBBLE':
             return { ...state, failedDribble: state.failedDribble - 1, turnover: state.turnover - 1 };
 
-        case 'INCREMENT_MISTAKE':
+        case 'INCREMENT_TURNOVER':
             return { ...state, turnover: state.turnover + 1 };
-        case 'DECREMENT_MISTAKE':
+        case 'DECREMENT_TURNOVER':
             return { ...state, turnover: state.turnover - 1 };
 
         case 'INCREMENT_SUCCESSFUL_DUEL':
@@ -193,7 +193,7 @@ const SoccerStatInput = () => {
                     <StatItem title="Successful Duels" stateKey="successfulDuel"
                         incrementType="INCREMENT_SUCCESSFUL_DUEL" decrementType="DECREMENT_SUCCESSFUL_DUEL" />
                     <StatItem title="Failed Duels" stateKey="failedDuel" incrementType="INCREMENT_FAILED_DUEL" decrementType="DECREMENT_FAILED_DUEL" />
-                    <StatItem title="Mistake" stateKey="turnover" incrementType="INCREMENT_TURNOVER" decrementType="DECREMENT_TURNOVER" />
+                    <StatItem title="Turnover" stateKey="turnover" incrementType="INCREMENT_TURNOVER" decrementType="DECREMENT_TURNOVER" />
                 </div>
             </div>
         </div >
