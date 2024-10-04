@@ -125,7 +125,7 @@ const SoccerStatInput = () => {
     const passSuccess = state["forwardPass"] + state["sidePass"] + state["backPass"];
     const passTries = passSuccess + state["failedPass"];
     const passSuccessRate = (passSuccess * 100 / passTries).toFixed(2)
-    const ballTouches = passTries + state["shot"] + state["dribble"] + state["failedDribble"];
+    const ballTouches = passTries + state["shot"] + state["dribble"] + state["failedDribble"] + state["successfulDuel"];
 
 
     return (
