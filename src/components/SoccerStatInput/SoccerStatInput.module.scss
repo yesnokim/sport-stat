@@ -1,0 +1,48 @@
+.bg {
+    .dashboard {
+
+        .value_group {
+
+            display: flex;
+            flex-wrap: wrap; // 여러 줄을 허용하기 위해 wrap 적용
+            justify-content: space-between; // 항목 간의 공간을 균등하게 분배
+            padding: 20px;
+
+            .item {
+                width: calc(100% / 5 - 10px); // 6개의 항목을 한 줄에 맞추기 위한 너비 계산
+                border: 1px solid #ccc;
+                padding: 10px;
+                margin-bottom: 20px; // 항목 간의 간격을 추가
+                text-align: center; // 텍스트를 가운데 정렬
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .bad_item {
+                color: red
+            }
+        }
+    }
+
+    .controller {
+        display: flex;
+        gap: 20px;
+        justify-content: space-evenly;
+
+        .stat_group {
+            display: flex;
+            flex-direction: column;
+            row-gap: 5px;
+
+            .stat_item {
+                display: flex;
+                gap: 5px;
+
+                .stat_title {
+                    width: 150px;
+                }
+            }
+        }
+    }
+}
