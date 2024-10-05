@@ -36,7 +36,7 @@ const MatchList = () => {
 
     return (
         <div className={ss.bg}>
-            <h2>Match List</h2>
+            <h2>경기 목록</h2>
             <table>
                 <thead>
                     <tr>
