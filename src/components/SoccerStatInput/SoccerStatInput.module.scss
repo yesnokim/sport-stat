@@ -1,0 +1,95 @@
+.bg {
+    .header {
+        display: flex;
+        flex-direction: row;
+        row-gap: 10px;
+
+        .input_item{
+            margin-right: 5px;
+        }
+    }
+
+    .dashboard {
+        display: flex;
+
+        .chart_group {
+            display: flex;
+            align-items: center;
+        }
+
+        .value_group {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr); // 5개의 열을 동일한 너비로 설정
+            gap: 10px; // 아이템 간 간격 설정
+            padding: 20px;
+
+            .item {
+                border: 1px solid #ccc;
+                padding: 10px;
+                margin-bottom: 20px; // 항목 간의 간격을 추가
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+
+                .title {
+                    display: flex;
+                    align-items: center;
+                    height: 50px;
+                }
+
+                .value {
+                    display: flex;
+                    align-items: center;
+                    font-size: larger;
+                    font-weight: bold;
+                    height: 50px;
+                }
+            }
+
+            .bad_item {
+                color: red;
+            }
+        }
+    }
+
+    .controller {
+        display: flex;
+        gap: 20px;
+        justify-content: space-evenly;
+
+        .stat_group {
+            display: flex;
+            flex-direction: column;
+            row-gap: 5px;
+
+            .stat_item {
+                display: flex;
+                gap: 5px;
+
+                .stat_title {
+                    width: 150px;
+                }
+            }
+        }
+    }
+}
+
+// 모바일 환경에서 한 줄에 두 개씩 표시하도록 설정
+@media (max-width: 768px) {
+    .controller {
+        flex-direction: column; // 컨트롤러를 수직으로 배치 (필요할 경우)
+
+        .stat_group {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr); // 두 개씩 배치
+            gap: 10px; // 항목 사이 간격 조정
+        }
+
+        .stat_item {
+            display: flex;
+            gap: 5px;
+            justify-content: space-between; // 각 stat_item 내부의 정렬 유지
+        }
+    }
+}
