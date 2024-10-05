@@ -1,9 +1,9 @@
-import { collection, query, orderBy, getDocs } from 'firebase/firestore';
+import { collection, getDocs, orderBy, query } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
 import { db } from '../../firebase';
-import ss from "./MatchList.module.scss"
 import { DB_COLLECTION_NAME } from '../../utils/constants';
-import { formatDate, getPlayStat } from '../../utils/utils';
+import { getPlayStat } from '../../utils/utils';
+import ss from "./MatchList.module.scss";
 
 const MatchList = () => {
     const [matches, setMatches] = useState([]);
