@@ -22,25 +22,56 @@ ChartJS.register(
 );
 
 const MAX_BALL_TOUCHES = 30;
-const MAX_KEY_PASSES = 5;
+const MAX_KEY_PASSES = 6;
 const MAX_ATTACK_POINTS = 5;
-const MAX_ENGAGEMENTS = 10;
+const MAX_ENGAGEMENTS = 5;
+const MAX_FORWARD_PASSES = 10;
+const MAX_SHOTS = 5;
 
 const RadarChart = ({ playerState, playerName = "Player 1" }) => {
 
     const calculateDerivedValues = (state) => {
         const passSuccess = state["forwardPass"] + state["sidePass"] + state["backPass"];
         const passTries = passSuccess + state["failedPass"];
-        const passSuccessRate = (passSuccess * 100 / passTries).toFixed(2);
+        const passSuccessRate = (passSuccess / passTries).toFixed(2);
         const ballTouches = passTries + state["shot"] + state["dribble"] + state["failedDribble"] + state["successfulDuel"];
 
+        const passSuccessWeight = 0.2;
+        const keyPassWeight = 0.10;
+        const attackPointWeight = 0.35;
+        const shotWeight = 0.1;
+        const forwardPassWeight = 0.25;
+
+        // 각 지표의 정규화된 값과 가중치를 곱하여 합산
+        const max_pass_score = state["keyPass"] > MAX_KEY_PASSES ? MAX_KEY_PASSES : state["keyPass"]
+        const max_attpts_score = (state["assist"] + state["goal"]) > MAX_ATTACK_POINTS ? MAX_ATTACK_POINTS : (state["assist"] + state["goal"]);
+        const max_shots_score = state["shot"] > MAX_SHOTS ? MAX_SHOTS : state["shot"]
+        const max_fwdpass_score = state["forwardPass"] > MAX_FORWARD_PASSES ? MAX_FORWARD_PASSES : state["forwardPass"]
+
+        const attackScore = (
+            passSuccessRate * passSuccessWeight +
+            (max_pass_score / MAX_KEY_PASSES) * keyPassWeight +
+            (max_attpts_score / MAX_ATTACK_POINTS) * attackPointWeight +
+            (max_shots_score / MAX_SHOTS) * shotWeight +
+            (max_fwdpass_score / MAX_FORWARD_PASSES) * forwardPassWeight
+        ) * 100; // 최종 점수를 100점 만점으로 환산
+
+
+        // console.log(passSuccessRate, max_pass_score / MAX_KEY_PASSES, max_attpts_score / MAX_ATTACK_POINTS, max_shots_score / MAX_SHOTS, max_fwdpass_score / MAX_FORWARD_PASSES, attackScore)
+
+
+        const keypass_ratio = (state["keyPass"] / MAX_KEY_PASSES).toFixed(2) * 100;
+        const ball_touch_ratio = (ballTouches / MAX_BALL_TOUCHES).toFixed(2) * 100;
+        const engagement_ratio = ((state["intercept"] + state["successfulDuel"] + state["failedDuel"]) / MAX_ENGAGEMENTS).toFixed(2) * 100
+        const ball_keeping_ratio = ((ballTouches - state["turnover"]) / ballTouches).toFixed(2) * 100;
+
         return {
-            "공격력": ((state["shot"] + state["assist"]) / MAX_ATTACK_POINTS).toFixed(2) * 100,
-            "패스 성공률": passSuccessRate,
-            "키패스": (state["keyPass"] / MAX_KEY_PASSES).toFixed(2) * 100,
-            "볼 터치수": (ballTouches / MAX_BALL_TOUCHES).toFixed(2) * 100,
-            "적극성과 집중력": ((state["intercept"] + state["successfulDuel"] + state["failedDuel"]) / MAX_ENGAGEMENTS).toFixed(2) * 100,
-            "볼 키핑능력": ((ballTouches - state["turnover"]) / ballTouches).toFixed(2) * 100,
+            "공격력": attackScore.toFixed(2),
+            "패스 성공률": passSuccessRate * 100,
+            "키패스": keypass_ratio > 100 ? 100 : keypass_ratio,
+            "볼 터치": ball_touch_ratio > 100 ? 100 : ball_touch_ratio,
+            "적극성과 집중력": engagement_ratio > 100 ? 100 : engagement_ratio,
+            "볼 키핑능력": ball_keeping_ratio > 100 ? 100 : ball_keeping_ratio,
         };
     };
 
