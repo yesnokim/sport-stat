@@ -19,6 +19,7 @@ const MatchList = () => {
             const matchesList = querySnapshot.docs.map(doc => ({
                 id: doc.id,
                 ...doc.data(),
+                matchDate: doc.data().matchDate.toDate().toLocaleString(),
             }));
 
             setMatches(matchesList);
@@ -45,18 +46,22 @@ const MatchList = () => {
                         <th>선수이름</th>
                         <th>볼터치</th>
                         <th>패스성공률</th>
+                        <th>골</th>
+                        <th>어시스트</th>
                     </tr>
                 </thead>
                 <tbody>
                     {matches.map(match => {
                         const { passSuccessRate, ballTouches } = getPlayStat(match)
                         return <tr key={match.id}>
-                            <td>{formatDate(match.matchDate)}</td>
+                            <td>{match.matchDate}</td>
                             <td>{match.title}</td>
                             <td>{match.matchPeriod}</td>
                             <td>{match.playerName}</td>
                             <td>{`${ballTouches}회`}</td>
                             <td>{`${passSuccessRate}%`}</td>
+                            <td>{match.goal}</td>
+                            <td>{match.assist}</td>
                         </tr>
                     })}
                 </tbody>

@@ -184,7 +184,7 @@ const SoccerStatInput = ({ playerName = "Ian Kim" }) => {
             <div className={ss.header}>
                 <input
                     className={ss.input_item}
-                    type="date"
+                    type="datetime-local"
                     value={matchDate}
                     onChange={handleDateChange}
                 />

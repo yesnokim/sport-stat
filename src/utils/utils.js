@@ -12,8 +12,9 @@ export const getPlayStat = (state) => {
     const passTries = passSuccess + state["failedPass"];
     const passSuccessRate = (passSuccess * 100 / passTries).toFixed(2)
     const ballTouches = passTries + state["shot"] + state["dribble"] + state["failedDribble"] + state["successfulDuel"];
+    const attackPoints = state["assist"] + state["goal"];
 
     return {
-        passSuccess, passTries, passSuccessRate, ballTouches
+        passSuccess, passTries, passSuccessRate, ballTouches, attackPoints
     }
 }
