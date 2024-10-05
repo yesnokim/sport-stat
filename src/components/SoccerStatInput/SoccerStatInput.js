@@ -151,8 +151,8 @@ const SoccerStatInput = () => {
                     placeholder="ex)2024.10.04. 대구OO. 전반. 20분."
                 />
             </div>
+            <h3>{title} 통계</h3>
             <div className={ss.dashboard}>
-                <h3>{title} 통계</h3>
                 <div className={ss.chart_group}>
                     <div className={ss.chart_item}>
                         <RadarChart playerState={state} playerName="IAN KIM" />
