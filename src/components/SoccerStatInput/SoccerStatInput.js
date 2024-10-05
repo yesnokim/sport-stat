@@ -180,9 +180,9 @@ const SoccerStatInput = ({ playerName = "Ian Kim", matchData, initTitle = '', in
         <div className={ss.stat_item}>
 
             <div className={ss.stat_title}>{title}</div>
-            <button onClick={() => dispatch({ type: decrementType })}>-</button>
+            <button className={ss.stat_btn} onClick={() => dispatch({ type: decrementType })}>-</button>
             <div className={ss.stat_value}>{state[stateKey]}</div>
-            <button onClick={() => dispatch({ type: incrementType })}>+</button>
+            <button className={ss.stat_btn} onClick={() => dispatch({ type: incrementType })}>+</button>
 
         </div>
     );
