@@ -24,7 +24,6 @@ ChartJS.register(
 const MAX_BALL_TOUCHES = 30;
 const MAX_KEY_PASSES = 6;
 const MAX_ATTACK_POINTS = 5;
-const MAX_ENGAGEMENTS = 5;
 const MAX_FORWARD_PASSES = 10;
 const MAX_SHOTS = 5;
 
@@ -62,7 +61,7 @@ const RadarChart = ({ playerState, playerName = "Player 1" }) => {
 
         const keypass_ratio = (state["keyPass"] / MAX_KEY_PASSES).toFixed(2) * 100;
         const ball_touch_ratio = (ballTouches / MAX_BALL_TOUCHES).toFixed(2) * 100;
-        const engagement_ratio = ((state["intercept"] + state["successfulDuel"] + state["failedDuel"]) / MAX_ENGAGEMENTS).toFixed(2) * 100
+        const engagement_ratio = ((state["intercept"] + state["successfulDuel"]) / (state["intercept"] + state["successfulDuel"] + state["failedDuel"] + state["turnover"])).toFixed(2) * 100
         const ball_keeping_ratio = ((ballTouches - state["turnover"]) / ballTouches).toFixed(2) * 100;
 
         return {
