@@ -4,7 +4,7 @@
         flex-direction: row;
         row-gap: 10px;
 
-        .input_item{
+        .input_item {
             margin-right: 5px;
         }
     }
@@ -69,6 +69,19 @@
 
                 .stat_title {
                     width: 150px;
+                    font-size: large;
+                }
+
+                .stat_value {
+                    font-size: large;
+                    margin: 0 5px 0 5px;
+                    width: 30px;
+                    text-align: center;
+                }
+
+                .stat_btn {
+                    width: 30px;
+                    height: 30px;
                 }
             }
         }
@@ -77,19 +90,94 @@
 
 // 모바일 환경에서 한 줄에 두 개씩 표시하도록 설정
 @media (max-width: 768px) {
-    .controller {
-        flex-direction: column; // 컨트롤러를 수직으로 배치 (필요할 경우)
+    .bg {
 
-        .stat_group {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr); // 두 개씩 배치
-            gap: 10px; // 항목 사이 간격 조정
+        .controller {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+
+            .stat_group {
+                display: flex;
+                flex-direction: column;
+                row-gap: 5px;
+
+                .stat_item {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    gap: 5px;
+
+                    .stat_title {
+                        width: 150px;
+                        font-size: large;
+                    }
+
+                    .stat_value {
+                        font-size: large;
+                        margin: 0 5px 0 5px;
+                    }
+
+                    .stat_btn {
+                        width: 30px;
+                        height: 30px;
+                    }
+                }
+            }
         }
 
-        .stat_item {
+        .dashboard {
             display: flex;
-            gap: 5px;
-            justify-content: space-between; // 각 stat_item 내부의 정렬 유지
+            flex-direction: column;
+
+            .chart_group {
+                display: flex;
+                align-items: center;
+            }
+
+            .value_group {
+                display: flex;
+                flex-direction: column;
+                gap: 2px; // 아이템 간 간격 설정
+
+                .item {
+                    border: 1px solid #ccc;
+                    border-radius: 10px;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    justify-content: center;
+
+                    .title {
+                        display: flex;
+                        align-items: center;
+                        height: 20px;
+                    }
+
+                    .value {
+                        display: flex;
+                        align-items: center;
+                        font-size: larger;
+                        font-weight: bold;
+                        height: 30px;
+                    }
+                }
+
+                .bad_item {
+                    color: red;
+                }
+            }
+        }
+
+        .header {
+            display: flex;
+            flex-direction: row;
+            row-gap: 10px;
+            visibility: hidden;
+
+            .input_item {
+                margin-right: 5px;
+            }
         }
     }
 }

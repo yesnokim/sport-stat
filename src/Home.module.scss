@@ -60,9 +60,28 @@
         flex-direction: column; // 세로로 배치하여 메뉴가 상단에, 컨텐츠가 하단에 위치
         row-gap: 10px; // 세로 배치일 경우 요소 간 간격을 설정
 
-        .menu {
-            width: 100%; // 메뉴를 화면 전체 너비로 설정
-            height: auto; // 필요에 따라 높이 설정을 자동으로
+        .left_box {
+            display: flex;
+            flex-direction: column; // 기본적으로는 가로 방향으로 배치
+            margin-top: 10px;
+
+            .profile {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                overflow: hidden;
+                height:150px;
+            }
+
+            .menu {
+                width: 100%; // 메뉴를 화면 전체 너비로 설정
+                height: auto; // 필요에 따라 높이 설정을 자동으로
+                display: flex;
+                flex-direction: row;
+                column-gap: 5px;
+                align-items: center;
+                justify-content: center;
+            }
         }
 
         .contents {

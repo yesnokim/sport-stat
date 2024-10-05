@@ -1,10 +1,10 @@
 import { collection, getDocs, orderBy, query } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { db } from '../../firebase';
 import { DB_COLLECTION_NAME } from '../../utils/constants';
 import { getPlayStat } from '../../utils/utils';
 import ss from "./MatchList.module.scss";
-import { useNavigate } from 'react-router-dom';
 
 const MatchList = () => {
     const [matches, setMatches] = useState([]);
