@@ -15,7 +15,7 @@ const Home = () => {
                 </div>
                 <div className={ss.menu}>
                     <div className={ss.menu_item} onClick={() => navigate("/")}>Home</div>
-                    <div className={ss.menu_item} onClick={() => navigate("/soccer-stat")}>Soccer Stat</div>
+                    <div className={ss.menu_item} onClick={() => navigate("/soccer-stat")}>Enter stats</div>
                 </div>
             </div>
             <div className={ss.contents}>
