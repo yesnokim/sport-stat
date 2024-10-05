@@ -7,14 +7,14 @@
     .left_box {
         display: flex;
         flex-direction: column; // 기본적으로는 가로 방향으로 배치
-        margin-top: 40px;
+        margin-top: 10px;
 
         .profile {
             display: flex;
             align-items: center;
             justify-content: center;
             overflow: hidden;
-            height: 250px;
+            height: 300px;
         }
 
         .menu {

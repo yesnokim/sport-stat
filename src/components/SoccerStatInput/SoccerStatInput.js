@@ -1,5 +1,5 @@
 import { doc, setDoc, Timestamp } from 'firebase/firestore';
-import { useReducer, useState } from "react";
+import { useEffect, useReducer, useState } from "react";
 import { db } from "../../firebase";
 import { DB_COLLECTION_NAME } from "../../utils/constants";
 import RadarChart from "../RadarChart/RadarChart";
@@ -29,6 +29,15 @@ const initialState = {
 // reducer 함수 정의
 function reducer(state, action) {
     switch (action.type) {
+        case 'UPDATE_STATE':
+            const newObj = {}
+            Object.keys(state).forEach(key => {
+                newObj[key] = action.payload[key];
+            })
+            return {
+                ...state,
+                ...newObj
+            };
         case 'INCREMENT_FORWARD_PASS':
             return { ...state, forwardPass: state.forwardPass + 1 };
         case 'DECREMENT_FORWARD_PASS':
@@ -110,12 +119,20 @@ function reducer(state, action) {
 }
 
 
-const SoccerStatInput = ({ playerName = "Ian Kim" }) => {
+const SoccerStatInput = ({ playerName = "Ian Kim", matchData, initTitle = '', initMatchDate = '', initMatchPeriod = '전반' }) => {
 
     const [state, dispatch] = useReducer(reducer, initialState);
-    const [title, setTitle] = useState('');
-    const [matchDate, setMatchDate] = useState('');
-    const [matchPeriod, setMatchPeriod] = useState('전반'); // 초기값을 설정
+    const [title, setTitle] = useState(initTitle);
+    const [matchDate, setMatchDate] = useState(initMatchDate);
+    const [matchPeriod, setMatchPeriod] = useState(initMatchPeriod); // 초기값을 설정
+
+    // matchData가 있으면 initialState와 병합
+    useEffect(() => {
+        if (matchData) {
+            const mergedState = { ...initialState, ...matchData };  // initialState와 matchData 병합
+            dispatch({ type: 'UPDATE_STATE', payload: mergedState });
+        }
+    }, [matchData]);
 
     const handleChange = (e) => {
         setMatchPeriod(e.target.value);

@@ -4,9 +4,11 @@ import { db } from '../../firebase';
 import { DB_COLLECTION_NAME } from '../../utils/constants';
 import { getPlayStat } from '../../utils/utils';
 import ss from "./MatchList.module.scss";
+import { useNavigate } from 'react-router-dom';
 
 const MatchList = () => {
     const [matches, setMatches] = useState([]);
+    const navigate = useNavigate();
 
     // Firestore에서 데이터를 불러오는 함수
     const fetchMatches = async () => {
@@ -34,9 +36,14 @@ const MatchList = () => {
         fetchMatches();
     }, []);
 
+    const handleShowDetailClick = (matchId) => {
+        // /soccer-stat/:matchId 경로로 이동
+        navigate(`/soccer-stat?matchId=${matchId}`);
+    }
+
     return (
         <div className={ss.bg}>
-            <h2>Match List</h2>
+            <h2>경기 목록</h2>
             <table>
                 <thead>
                     <tr>
@@ -48,6 +55,7 @@ const MatchList = () => {
                         <th>패스성공률</th>
                         <th>골</th>
                         <th>어시스트</th>
+                        <th>상세보기</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -62,6 +70,9 @@ const MatchList = () => {
                             <td>{`${passSuccessRate}%`}</td>
                             <td>{match.goal}</td>
                             <td>{match.assist}</td>
+                            <td className={ss.click_td} onClick={() => {
+                                handleShowDetailClick(match.id)
+                            }}>보기</td>
                         </tr>
                     })}
                 </tbody>
