@@ -9,6 +9,7 @@
     "ajv": "^8.17.1",
     "ajv-keywords": "^5.1.0",
     "chart.js": "^4.4.4",
+    "firebase": "^10.14.0",
     "react": "^18.3.1",
     "react-chartjs-2": "^5.2.0",
     "react-dom": "^18.3.1",
@@ -45,6 +46,5 @@
   },
   "devDependencies": {
     "gh-pages": "^6.1.1"
-  },
-  "homepage": "https://yesnokim.github.io/sport-stat"
+  }
 }

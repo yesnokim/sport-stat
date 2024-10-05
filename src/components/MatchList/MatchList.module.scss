@@ -1,0 +1,33 @@
+.bg {
+    width: 100%;
+
+    table {
+        width: 100%; // 테이블 너비를 화면 전체로 설정
+        border-collapse: collapse; // 테이블 셀 간의 경계 없앰
+
+        thead {
+            background-color: #f2f2f2; // 헤더의 배경색 설정 (선택사항)
+
+            th {
+                text-align: center; // 헤더 텍스트 중앙 정렬
+                padding: 10px; // 헤더 셀 안의 여백 추가
+                border: 1px solid #ccc; // 셀 경계 추가
+            }
+        }
+
+        tbody {
+            tr {
+                td {
+                    text-align: center; // 행의 텍스트 중앙 정렬
+                    padding: 10px; // 셀 안의 여백 추가
+                    border: 1px solid #ccc; // 셀 경계 추가
+                }
+            }
+
+            tr:nth-child(even) {
+                background-color: #f9f9f9; // 짝수 행에 배경색 설정 (선택사항)
+            }
+        }
+    }
+
+}

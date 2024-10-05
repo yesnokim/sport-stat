@@ -1,6 +1,10 @@
+import { doc, setDoc, Timestamp } from 'firebase/firestore';
 import { useReducer, useState } from "react";
-import ss from "./SoccerStatInput.module.scss";
+import { db } from "../../firebase";
+import { DB_COLLECTION_NAME } from "../../utils/constants";
 import RadarChart from "../RadarChart/RadarChart";
+import ss from "./SoccerStatInput.module.scss";
+import { getPlayStat } from '../../utils/utils';
 
 // 초기 상태 정의
 const initialState = {
@@ -106,15 +110,15 @@ function reducer(state, action) {
 }
 
 
-const SoccerStatInput = () => {
+const SoccerStatInput = ({ playerName = "Ian Kim" }) => {
 
     const [state, dispatch] = useReducer(reducer, initialState);
     const [title, setTitle] = useState('');
-    const [selectedDate, setSelectedDate] = useState('');
-    const [selectedPeriod, setSelectedPeriod] = useState('전반'); // 초기값을 설정
+    const [matchDate, setMatchDate] = useState('');
+    const [matchPeriod, setMatchPeriod] = useState('전반'); // 초기값을 설정
 
     const handleChange = (e) => {
-        setSelectedPeriod(e.target.value);
+        setMatchPeriod(e.target.value);
     };
 
     const handleTitleChange = (e) => {
@@ -122,8 +126,37 @@ const SoccerStatInput = () => {
     };
 
     const handleDateChange = (e) => {
-        setSelectedDate(e.target.value);
+        setMatchDate(e.target.value);
     };
+
+    const saveMatchResult = async () => {
+        const isConfirmed = window.confirm('정말 저장하시겠습니까?');
+
+        if (isConfirmed && matchDate) {
+
+            const matchTimestamp = Timestamp.fromDate(new Date(matchDate));
+
+            const matchId = `${title}_${matchDate}_${matchPeriod}_${playerName}`; // SQL의 복합 키와 유사한 방식으로 key 생성
+
+            const matchData = {
+                title,
+                matchDate: matchTimestamp,
+                matchPeriod,
+                playerName,
+                ...state, // 경기 관련 통계 (useReducer로 관리하는 state)
+            };
+
+            try {
+                // 'matches' 컬렉션에 문서를 만들고 데이터를 저장
+                await setDoc(doc(db, DB_COLLECTION_NAME, matchId), matchData, { merge: true });
+                alert("Data saved successfully!");
+            } catch (error) {
+                console.error("Error saving document: ", error);
+            }
+        } else {
+            alert("저장 작업이 취소되었습니다.");
+        }
+    }
 
     // 통계 UI 항목 컴포넌트
     const StatItem = ({ title, stateKey, incrementType, decrementType }) => (
@@ -144,10 +177,7 @@ const SoccerStatInput = () => {
         </div>
     }
 
-    const passSuccess = state["forwardPass"] + state["sidePass"] + state["backPass"];
-    const passTries = passSuccess + state["failedPass"];
-    const passSuccessRate = (passSuccess * 100 / passTries).toFixed(2)
-    const ballTouches = passTries + state["shot"] + state["dribble"] + state["failedDribble"] + state["successfulDuel"];
+    const { passSuccessRate, passTries, ballTouches } = getPlayStat(state)
 
     return (
         <div className={ss.bg}>
@@ -155,7 +185,7 @@ const SoccerStatInput = () => {
                 <input
                     className={ss.input_item}
                     type="date"
-                    value={selectedDate}
+                    value={matchDate}
                     onChange={handleDateChange}
                 />
                 <input
@@ -165,18 +195,21 @@ const SoccerStatInput = () => {
                     onChange={handleTitleChange}
                     placeholder="예) 대구ㅇㅇ초"
                 />
-                <select className={ss.input_item} value={selectedPeriod} onChange={handleChange}>
+                <select className={ss.input_item} value={matchPeriod} onChange={handleChange}>
                     <option value="전반">전반</option>
                     <option value="후반">후반</option>
                     <option value="3">3Q</option>
                     <option value="4">4Q</option>
                 </select>
+                <button onClick={() => {
+                    saveMatchResult();
+                }}>SAVE</button>
             </div>
-            {title && <h3>{` vs ${title} (${selectedDate}, ${selectedPeriod})`}</h3>}
+            {title && <h3>{` vs ${title} (${matchDate}, ${matchPeriod})`}</h3>}
             <div className={ss.dashboard}>
                 <div className={ss.chart_group}>
                     <div className={ss.chart_item}>
-                        <RadarChart playerState={state} playerName="IAN KIM" />
+                        <RadarChart playerState={state} playerName={playerName} />
                     </div>
                 </div>
                 <div className={ss.value_group}>
