@@ -1,6 +1,8 @@
+import MatchList from "../../components/MatchList/MatchList";
+
 const Main = () => {
 
-    return <div>GOGO!</div>
+    return <div><MatchList /></div>
 }
 
 export default Main;

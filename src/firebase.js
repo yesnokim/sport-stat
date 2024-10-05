@@ -13,7 +13,7 @@ const firebaseConfig = {
     messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
     appId: process.env.REACT_APP_FIREBASE_APP_ID,
     measurementId: process.env.REACT_APP_MEASUREMENT_ID
-  };
+};
 
 // Firebase 초기화
 const app = initializeApp(firebaseConfig);
