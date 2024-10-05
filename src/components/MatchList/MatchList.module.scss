@@ -22,6 +22,12 @@
                     padding: 10px; // 셀 안의 여백 추가
                     border: 1px solid #ccc; // 셀 경계 추가
                 }
+
+                .click_td {
+                    &:hover {
+                        cursor: pointer;
+                    }
+                }
             }
 
             tr:nth-child(even) {
