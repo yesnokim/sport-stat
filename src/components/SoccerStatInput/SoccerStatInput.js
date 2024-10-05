@@ -110,9 +110,19 @@ const SoccerStatInput = () => {
 
     const [state, dispatch] = useReducer(reducer, initialState);
     const [title, setTitle] = useState('');
+    const [selectedDate, setSelectedDate] = useState('');
+    const [selectedPeriod, setSelectedPeriod] = useState('전반'); // 초기값을 설정
 
     const handleChange = (e) => {
-        setTitle(e.target.value);
+        setSelectedPeriod(e.target.value);
+    };
+
+    const handleTitleChange = (e) => {
+        setTitle(e.target.value?.trim?.());
+    };
+
+    const handleDateChange = (e) => {
+        setSelectedDate(e.target.value);
     };
 
     // 통계 UI 항목 컴포넌트
@@ -139,19 +149,30 @@ const SoccerStatInput = () => {
     const passSuccessRate = (passSuccess * 100 / passTries).toFixed(2)
     const ballTouches = passTries + state["shot"] + state["dribble"] + state["failedDribble"] + state["successfulDuel"];
 
-
     return (
         <div className={ss.bg}>
             <div className={ss.header}>
                 <input
-                    style={{ width: "300px" }}
+                    className={ss.input_item}
+                    type="date"
+                    value={selectedDate}
+                    onChange={handleDateChange}
+                />
+                <input
+                    className={ss.input_item}
                     type="text"
                     value={title}
-                    onChange={handleChange}
-                    placeholder="ex)2024.10.04. 대구OO. 전반. 20분."
+                    onChange={handleTitleChange}
+                    placeholder="예) 대구ㅇㅇ초"
                 />
+                <select className={ss.input_item} value={selectedPeriod} onChange={handleChange}>
+                    <option value="전반">전반</option>
+                    <option value="후반">후반</option>
+                    <option value="3">3Q</option>
+                    <option value="4">4Q</option>
+                </select>
             </div>
-            <h3>{title} 통계</h3>
+            {title && <h3>{` vs ${title} (${selectedDate}, ${selectedPeriod})`}</h3>}
             <div className={ss.dashboard}>
                 <div className={ss.chart_group}>
                     <div className={ss.chart_item}>

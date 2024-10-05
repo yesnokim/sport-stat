@@ -1,10 +1,22 @@
 .bg {
+    .header {
+        display: flex;
+        flex-direction: row;
+        row-gap: 10px;
+
+        .input_item{
+            margin-right: 5px;
+        }
+    }
+
     .dashboard {
         display: flex;
+
         .chart_group {
             display: flex;
             align-items: center;
         }
+
         .value_group {
             display: grid;
             grid-template-columns: repeat(5, 1fr); // 5개의 열을 동일한 너비로 설정
@@ -20,7 +32,7 @@
                 align-items: center;
                 justify-content: center;
 
-                .title{
+                .title {
                     display: flex;
                     align-items: center;
                     height: 50px;
@@ -67,6 +79,7 @@
 @media (max-width: 768px) {
     .controller {
         flex-direction: column; // 컨트롤러를 수직으로 배치 (필요할 경우)
+
         .stat_group {
             display: grid;
             grid-template-columns: repeat(2, 1fr); // 두 개씩 배치
