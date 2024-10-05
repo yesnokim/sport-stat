@@ -187,10 +187,10 @@ const SoccerStatInput = ({ playerName = "Ian Kim", matchData, initTitle = '', in
         </div>
     );
 
-    const DashboardItem = ({ title, value, isBad }) => {
+    const DashboardItem = ({ title, value, isBad, suffix = '' }) => {
         return <div className={isBad ? [ss.item, ss.bad_item].join(" ") : ss.item}>
             <div className={ss.title}>{title}</div>
-            <div className={ss.value}>{value}</div>
+            <div className={ss.value}>{`${value}${suffix}`}</div>
         </div>
     }
 
@@ -232,7 +232,7 @@ const SoccerStatInput = ({ playerName = "Ian Kim", matchData, initTitle = '', in
                 <div className={ss.value_group}>
                     <DashboardItem title="볼 터치수" value={ballTouches} />
                     <DashboardItem title="패스 시도" value={passTries} />
-                    <DashboardItem title="패스 성공률" value={passSuccessRate} />
+                    <DashboardItem title="패스 성공률" value={passSuccessRate} suffix='%' />
                     <DashboardItem title="키패스" value={state["keyPass"]} />
                     <DashboardItem title="어시스트" value={state["assist"]} />
                     <DashboardItem title="슛" value={state["shot"]} />

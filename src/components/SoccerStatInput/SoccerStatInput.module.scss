@@ -109,11 +109,12 @@
                     gap: 5px;
 
                     .stat_title {
-                        width: 150px;
+                        width: 100%;
                         font-size: large;
                     }
 
                     .stat_value {
+                        width: 30px;
                         font-size: large;
                         margin: 0 5px 0 5px;
                     }
@@ -152,10 +153,14 @@
                         display: flex;
                         align-items: center;
                         height: 20px;
+                        width: 100%;
+                        justify-content: center;
                     }
 
                     .value {
                         display: flex;
+                        width: 100%;
+                        justify-content: center;
                         align-items: center;
                         font-size: larger;
                         font-weight: bold;
