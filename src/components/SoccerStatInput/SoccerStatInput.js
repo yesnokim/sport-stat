@@ -1,5 +1,6 @@
 import { useReducer, useState } from "react";
 import ss from "./SoccerStatInput.module.scss";
+import RadarChart from "../RadarChart/RadarChart";
 
 // 초기 상태 정의
 const initialState = {
@@ -152,6 +153,11 @@ const SoccerStatInput = () => {
             </div>
             <div className={ss.dashboard}>
                 <h3>{title} 통계</h3>
+                <div className={ss.chart_group}>
+                    <div className={ss.chart_item}>
+                        <RadarChart playerState={state} playerName="IAN KIM" />
+                    </div>
+                </div>
                 <div className={ss.value_group}>
                     <DashboardItem title="볼 터치수" value={ballTouches} />
                     <DashboardItem title="패스 시도" value={passTries} />
