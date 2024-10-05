@@ -1,6 +1,6 @@
 const Main = () => {
 
-    return <div>Choose Menu!</div>
+    return <div>GOGO!</div>
 }
 
 export default Main;

@@ -4,28 +4,44 @@
     flex-direction: row; // 기본적으로는 가로 방향으로 배치
     column-gap: 10px;
 
-    .menu {
-        width: 200px;
-        height: 100%;
-        justify-content: center;
-        row-gap: 5px;
+    .left_box {
         display: flex;
-        flex-direction: column;
+        flex-direction: column; // 기본적으로는 가로 방향으로 배치
+        margin-top: 40px;
 
-        .menu_item {
+        .profile {
             display: flex;
             align-items: center;
             justify-content: center;
-            width: 150px;
-            height: 50px;
-            font-size: large;
-            font-weight: 700;
-            border: 1px solid gray;
-            border-radius: 10px;
+            overflow: hidden;
+            height: 250px;
+        }
 
-            &:hover {
-                cursor: pointer;
-                background-color: skyblue;
+        .menu {
+            margin-top: 40px;
+            width: 200px;
+            height: 100%;
+            justify-content: flex-start;
+            row-gap: 5px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+
+            .menu_item {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 150px;
+                height: 50px;
+                font-size: large;
+                font-weight: 700;
+                border: 1px solid gray;
+                border-radius: 10px;
+
+                &:hover {
+                    cursor: pointer;
+                    background-color: skyblue;
+                }
             }
         }
     }
@@ -48,7 +64,7 @@
             width: 100%; // 메뉴를 화면 전체 너비로 설정
             height: auto; // 필요에 따라 높이 설정을 자동으로
         }
-    
+
         .contents {
             width: 100%; // 컨텐츠도 화면 전체 너비로 설정
             height: 100%; // 필요에 따라 높이 설정을 조정 가능
