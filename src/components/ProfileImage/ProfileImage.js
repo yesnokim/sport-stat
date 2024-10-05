@@ -1,5 +1,5 @@
 import React from 'react';
-import ss from "./ProfileImage.module.scss"
+import ss from "./ProfileImage.module.scss";
 
 const ProfileImage = () => {
     return (

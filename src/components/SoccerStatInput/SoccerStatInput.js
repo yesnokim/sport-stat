@@ -2,9 +2,9 @@ import { doc, setDoc, Timestamp } from 'firebase/firestore';
 import { useEffect, useReducer, useState } from "react";
 import { db } from "../../firebase";
 import { DB_COLLECTION_NAME } from "../../utils/constants";
+import { getPlayStat } from '../../utils/utils';
 import RadarChart from "../RadarChart/RadarChart";
 import ss from "./SoccerStatInput.module.scss";
-import { getPlayStat } from '../../utils/utils';
 
 // 초기 상태 정의
 const initialState = {

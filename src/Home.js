@@ -1,11 +1,11 @@
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { useEffect, useState } from 'react';
 import { Navigate, Route, Routes, useNavigate } from 'react-router-dom';
+import ProfileImage from './components/ProfileImage/ProfileImage';
 import ss from "./Home.module.scss";
+import Login from './pages/Login/Login';
 import Main from "./pages/Main/Main";
 import SoccerStat from "./pages/SoccerStat/SoccerStat";
-import ProfileImage from './components/ProfileImage/ProfileImage';
-import { useEffect, useState } from 'react';
-import { getAuth, onAuthStateChanged } from 'firebase/auth';
-import Login from './pages/Login/Login';
 
 const Home = () => {
     const navigate = useNavigate();
