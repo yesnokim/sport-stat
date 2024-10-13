@@ -12,6 +12,7 @@ import { db } from "../../firebase";
 import { DB_COLLECTION_NAME } from "../../utils/constants";
 import ss from "./Main.module.scss";
 import {
+  calculateAttackingMidfielderScore,
   getPlayStat,
   processData,
 } from "../../utils/utils";
@@ -83,8 +84,15 @@ const Main = () => {
                       getPlayStat(row);
                     return passSuccessRate;
                   },
+                  (row) => {
+                    const attackScore =
+                      calculateAttackingMidfielderScore(
+                        row
+                      );
+                    return attackScore;
+                  },
                 ]}
-                labelsLine={["패스성공률"]}
+                labelsLine={["패스성공률", "공격능력"]}
                 yBarFns={[
                   (row) => {
                     const { ballTouches } =
