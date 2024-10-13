@@ -11,6 +11,8 @@
 
   .dashboard {
     display: flex;
+    flex-direction: column;
+    justify-content: center;
 
     .chart_group {
       display: flex;
