@@ -55,8 +55,8 @@ const Main = () => {
         <SignOutButton />
       </div>
       <div className={ss.contents}>
-        <div className={ss.title}>경기 시각화</div>
         <div className={ss.charts}>
+          <div className={ss.title}>통계 (최근 10경기)</div>
           <div className={ss.chart}>
             <MixedChart
               title="종합평가"
@@ -149,7 +149,7 @@ const Main = () => {
           </div>
         </div>
         <div className={ss.match_list}>
-          <div className={ss.title}>경기목록</div>
+          <div className={ss.title}>경기목록 및 통계</div>
           <div className={ss.content}>
             <MatchList data={matchData} />
           </div>

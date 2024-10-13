@@ -54,7 +54,11 @@ export const getPlayStat = (state) => {
 };
 
 // Firestore 데이터 가공 함수
-export const processData = (data, sortOrder = "asc") => {
+export const processData = (
+  data,
+  sortOrder = "asc",
+  gamesToShow = 10
+) => {
   if (!data) return null;
   // 1. 날짜까지만 고려하여 matchDate를 처리하고 그룹화 기준으로 사용
   const groupedData = groupBy(data, (item) => {
@@ -110,5 +114,5 @@ export const processData = (data, sortOrder = "asc") => {
     [sortOrder] // 'asc' 또는 'desc'로 정렬
   );
 
-  return sortedData;
+  return sortedData.slice(0, gamesToShow);
 };
