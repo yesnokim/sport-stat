@@ -1,0 +1,46 @@
+.bg {
+    .base_table {
+      width: 100%;
+      border-collapse: collapse;
+    
+      .table_header {
+        background-color: aliceblue;
+      }
+    
+      .table_header_cell {
+        font-weight: bold;
+        padding: 10px;
+        border-bottom: 3px solid red;
+        cursor: pointer;
+      }
+      
+      .table_body {
+          width: 100%;
+      
+          .table_row {
+            border: 1px solid gray;
+          }
+          
+          .table_cell {
+            padding: 10px;
+            border: 1px solid gray;
+          }
+      }
+    }
+    
+    .pagination_controls {
+        margin-top: 5px;
+      display: flex;
+      align-items: center;
+      column-gap: 10px;
+      font-size: small;
+    
+      button {
+        height: 30px;
+      }
+    
+      .page_size_selector {
+        height: 30px;
+      }
+    }
+}
