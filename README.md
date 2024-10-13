@@ -1,70 +1,32 @@
-# Getting Started with Create React App
+1. 패스 능력 (Pass Ability)
+   패스 성공률을 계산하기 위해, 전진 패스(forwardPass), 측면 패스(sidePass), **후방 패스(backPass)**의 성공과 **실패한 패스(failedPass)**를 모두 합하여 전체 패스 시도를 평가합니다.
+   이 패스 성공률은 전체 평가에서 **50%**의 가중치를 차지하며, 공격형 미드필더의 가장 중요한 능력으로 설정됩니다.
+2. 득점 및 기회 창출 능력 (Scoring & Chance Creation)
+   득점(goal), 어시스트(assist), 그리고 **키패스(keyPass)**를 기반으로 한 득점 기여도를 평가합니다.
+   득점은 공격의 핵심 기여로 10점의 가중치를 부여받습니다.
+   어시스트와 키패스는 각각 10점과 4점의 가중치를 부여하여 기회 창출 능력을 반영합니다.
+   이 득점 및 기회 창출 능력은 전체 평가에서 **30%**의 가중치를 차지합니다.
+3. 드리블 및 듀얼 성공률 (Dribbling & Duel Success Rate)
+   드리블 성공률은 **성공적인 드리블(dribble)**과 **실패한 드리블(failedDribble)**을 고려하여 평가합니다.
+   드리블 성공률은 전체 평가에서 **5%**의 가중치를 가집니다.
+   듀얼 성공률은 **성공적인 듀얼(successfulDuel)**과 **실패한 듀얼(failedDuel)**을 기반으로 계산됩니다.
+   듀얼 성공률도 전체 평가에서 **5%**의 가중치를 가집니다.
+4. 슈팅 능력 (Shooting Ability)
+   슈팅 정확도는 **유효 슈팅(shotOnTarget)**과 **총 슈팅 시도(shot)**를 고려하여 평가됩니다.
+   슈팅 정확도는 전체 평가에서 **2.5%**의 가중치를 가집니다.
+   총 슈팅 시도는 공격적 시도를 반영하며, 총 평가에서 **5%**의 가중치를 차지합니다.
+5. 압박 및 인터셉트 (Pressure & Interceptions)
+   압박 성공률은 **인터셉트(intercept)**와 **성공적인 듀얼(successfulDuel)**을 포함하여 상대방으로부터 공을 탈취하는 능력을 평가합니다.
+   압박 성공률은 전체 평가에서 **2.5%**의 가중치를 가집니다.
+6. 최종 공격 점수 계산
+   이 함수는 다양한 공격 지표를 가중치에 따라 평가하며, 총합이 100점 만점이 되도록 계산합니다. 각각의 지표는 공격형 미드필더로서의 역할을 수행하는 데 중요한 요소로 고려됩니다.
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
-
-## Available Scripts
-
-In the project directory, you can run:
-
-### `npm start`
-
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
-
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+요약:
+패스 성공률: 50%
+득점 및 기회 창출: 30%
+드리블 성공률: 5%
+듀얼 성공률: 5%
+슈팅 정확도: 2.5%
+총 슈팅 시도: 5%
+압박 성공률: 2.5%
+이 지표들은 공격형 미드필더가 공격 전개와 기회 창출, 그리고 득점 기여에 얼마나 큰 역할을 했는지 평가하는 데 중점을 둡니다.

@@ -116,3 +116,76 @@ export const processData = (
 
   return sortedData.slice(0, gamesToShow);
 };
+
+export const calculateAttackingMidfielderScore = (
+  playerStats
+) => {
+  const {
+    forwardPass,
+    sidePass,
+    backPass,
+    failedPass,
+    keyPass,
+    assist,
+    goal,
+    dribble,
+    failedDribble,
+    successfulDuel,
+    failedDuel,
+    shot,
+    shotOnTarget,
+    turnover,
+    intercept,
+  } = playerStats;
+
+  // 패스 성공률 계산
+  const totalPasses =
+    forwardPass + sidePass + backPass + failedPass;
+  const passSuccessRate =
+    totalPasses > 0
+      ? ((forwardPass + sidePass + backPass) /
+          totalPasses) *
+        100
+      : 0;
+
+  // 드리블 성공률 계산
+  const totalDribbles = dribble + failedDribble;
+  const dribbleSuccessRate =
+    totalDribbles > 0 ? (dribble / totalDribbles) * 100 : 0;
+
+  // 듀얼 성공률 계산
+  const totalDuels = successfulDuel + failedDuel;
+  const duelSuccessRate =
+    totalDuels > 0
+      ? (successfulDuel / totalDuels) * 100
+      : 0;
+
+  // 압박 성공률 계산
+  const totalPressures = intercept + totalDuels;
+  const pressureSuccessRate =
+    totalPressures > 0
+      ? ((intercept + successfulDuel) / totalPressures) *
+        100
+      : 0;
+
+  // 슈팅 정확도 계산
+  const totalShots = shot;
+  const shotAccuracy =
+    totalShots > 0 ? (shotOnTarget / totalShots) * 100 : 0;
+
+  // 득점 능력과 기회 창출 계산
+  const scoringAbility =
+    goal * 10 + keyPass * 4 + assist * 10;
+
+  // 공격력 계산
+  const attackingScore =
+    passSuccessRate * 0.5 + // 패스 능력
+    scoringAbility * 0.3 + // 득점 및 기회 창출 능력
+    dribbleSuccessRate * 0.05 + // 드리블 성공률
+    duelSuccessRate * 0.05 + // 듀얼 성공률
+    shotAccuracy * 0.025 + // 슈팅 정확도
+    totalShots * 0.05 + // 총 슈팅 시도
+    pressureSuccessRate * 0.025; // 압박 성공률
+
+  return Math.min(attackingScore, 100); // 점수는 최대 100점
+};

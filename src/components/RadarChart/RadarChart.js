@@ -10,6 +10,7 @@ import {
   Legend,
 } from "chart.js";
 import ss from "./RadarChart.module.scss";
+import { calculateAttackingMidfielderScore } from "../../utils/utils";
 
 // Chart.js 요소들을 등록
 ChartJS.register(
@@ -21,11 +22,8 @@ ChartJS.register(
   Legend
 );
 
-const MAX_BALL_TOUCHES = 30;
-const MAX_KEY_PASSES = 6;
-const MAX_ATTACK_POINTS = 5;
-const MAX_FORWARD_PASSES = 10;
-const MAX_SHOTS = 5;
+const MAX_BALL_TOUCHES = 33;
+const MAX_KEY_PASSES = 7;
 
 const RadarChart = ({
   playerState,
@@ -47,40 +45,8 @@ const RadarChart = ({
       state["failedDribble"] +
       state["successfulDuel"];
 
-    const passSuccessWeight = 0.2;
-    const keyPassWeight = 0.1;
-    const attackPointWeight = 0.35;
-    const shotWeight = 0.1;
-    const forwardPassWeight = 0.25;
-
-    // 각 지표의 정규화된 값과 가중치를 곱하여 합산
-    const max_pass_score =
-      state["keyPass"] > MAX_KEY_PASSES
-        ? MAX_KEY_PASSES
-        : state["keyPass"];
-    const max_attpts_score =
-      state["assist"] + state["goal"] > MAX_ATTACK_POINTS
-        ? MAX_ATTACK_POINTS
-        : state["assist"] + state["goal"];
-    const max_shots_score =
-      state["shot"] > MAX_SHOTS ? MAX_SHOTS : state["shot"];
-    const max_fwdpass_score =
-      state["forwardPass"] > MAX_FORWARD_PASSES
-        ? MAX_FORWARD_PASSES
-        : state["forwardPass"];
-
     const attackScore =
-      (passSuccessRate * passSuccessWeight +
-        (max_pass_score / MAX_KEY_PASSES) * keyPassWeight +
-        (max_attpts_score / MAX_ATTACK_POINTS) *
-          attackPointWeight +
-        (max_shots_score / MAX_SHOTS) * shotWeight +
-        (max_fwdpass_score / MAX_FORWARD_PASSES) *
-          forwardPassWeight) *
-      100; // 최종 점수를 100점 만점으로 환산
-
-    // console.log(passSuccessRate, max_pass_score / MAX_KEY_PASSES, max_attpts_score / MAX_ATTACK_POINTS, max_shots_score / MAX_SHOTS, max_fwdpass_score / MAX_FORWARD_PASSES, attackScore)
-
+      calculateAttackingMidfielderScore(playerState);
     const keypass_ratio =
       (state["keyPass"] / MAX_KEY_PASSES).toFixed(2) * 100;
     const ball_touch_ratio =
