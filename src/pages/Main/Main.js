@@ -58,55 +58,58 @@ const Main = () => {
         <div className={ss.charts}>
           <div className={ss.title}>통계 (최근 10경기)</div>
           <div className={ss.chart}>
-            <MixedChart
-              title="종합평가"
-              data={processedDate}
-              xAxisMobileFn={(row) => {
-                return row.title;
-              }}
-              xAxisFn={(row) => {
-                const timestamp = row.matchDate; // Firestore의 Timestamp 값
-                const date = timestamp.toDate(); // Timestamp를 JavaScript Date 객체로 변환
-                const month = (date.getMonth() + 1)
-                  .toString()
-                  .padStart(2, "0"); // 월 (MM) 형식
-                const day = date
-                  .getDate()
-                  .toString()
-                  .padStart(2, "0"); // 일 (DD) 형식
-                return `${month}/${day} ${row.title} ${row.matchPeriod}`;
-              }}
-              yLineFns={[
-                (row) => {
-                  const { passSuccessRate } =
-                    getPlayStat(row);
-                  return passSuccessRate;
-                },
-              ]}
-              labelsLine={["패스성공률"]}
-              yBarFns={[
-                (row) => {
-                  const { ballTouches } = getPlayStat(row);
-                  return ballTouches;
-                },
-                (row) => {
-                  const { passTries } = getPlayStat(row);
-                  return passTries;
-                },
-                (row) => row.forwardPass,
-                (row) => {
-                  return row.keyPass;
-                },
-                (row) => row.turnover,
-              ]}
-              labelsBar={[
-                "볼터치횟수",
-                "패스횟수",
-                "전진패스",
-                "키패스",
-                "턴오버",
-              ]}
-            />
+            {processedDate && (
+              <MixedChart
+                title="종합평가"
+                data={processedDate}
+                xAxisMobileFn={(row) => {
+                  return row.title;
+                }}
+                xAxisFn={(row) => {
+                  const timestamp = row.matchDate; // Firestore의 Timestamp 값
+                  const date = timestamp.toDate(); // Timestamp를 JavaScript Date 객체로 변환
+                  const month = (date.getMonth() + 1)
+                    .toString()
+                    .padStart(2, "0"); // 월 (MM) 형식
+                  const day = date
+                    .getDate()
+                    .toString()
+                    .padStart(2, "0"); // 일 (DD) 형식
+                  return `${month}/${day} ${row.title} ${row.matchPeriod}`;
+                }}
+                yLineFns={[
+                  (row) => {
+                    const { passSuccessRate } =
+                      getPlayStat(row);
+                    return passSuccessRate;
+                  },
+                ]}
+                labelsLine={["패스성공률"]}
+                yBarFns={[
+                  (row) => {
+                    const { ballTouches } =
+                      getPlayStat(row);
+                    return ballTouches;
+                  },
+                  (row) => {
+                    const { passTries } = getPlayStat(row);
+                    return passTries;
+                  },
+                  (row) => row.forwardPass,
+                  (row) => {
+                    return row.keyPass;
+                  },
+                  (row) => row.turnover,
+                ]}
+                labelsBar={[
+                  "볼터치횟수",
+                  "패스횟수",
+                  "전진패스",
+                  "키패스",
+                  "턴오버",
+                ]}
+              />
+            )}
           </div>
           <div className={ss.chart}>
             <LineChart

@@ -1,16 +1,16 @@
-import React, { useEffect, useState } from "react";
-import { Line } from "react-chartjs-2";
 import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
   BarElement,
-  PointElement,
+  CategoryScale,
+  Chart as ChartJS,
+  Legend,
+  LinearScale,
   LineElement,
+  PointElement,
   Title,
   Tooltip,
-  Legend,
 } from "chart.js";
+import React, { useEffect, useState } from "react";
+import { Bar } from "react-chartjs-2";
 
 // Chart.js 필수 플러그인 등록
 ChartJS.register(
@@ -63,6 +63,7 @@ const MixedChart = ({
   }, []);
 
   const chartData = {
+    type: "bar",
     labels: isMobile
       ? data.map(xAxisMobileFn)
       : data.map(xAxisFn), // X축 데이터
@@ -82,7 +83,7 @@ const MixedChart = ({
       })),
       // Bar Chart에 해당하는 데이터셋들
       ...yBarFns.map((yBarFn, index) => ({
-        type: "bar",
+        //   type: "bar",
         label: labelsBar[index],
         data: data.map(yBarFn),
         backgroundColor:
@@ -113,7 +114,7 @@ const MixedChart = ({
     scales: {
       y: {
         type: "linear",
-        position: "left", // Line chart 전용 Y축
+        position: "left", // Line chart 전용 Y축,
       },
       y1: {
         type: "linear",
@@ -126,7 +127,7 @@ const MixedChart = ({
   };
 
   return (
-    <Line
+    <Bar
       data={chartData}
       options={options}
     />
