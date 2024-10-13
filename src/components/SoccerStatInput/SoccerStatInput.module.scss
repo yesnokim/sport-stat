@@ -1,193 +1,195 @@
 .bg {
-    .header {
-        display: flex;
-        flex-direction: row;
-        row-gap: 10px;
+  .header {
+    display: flex;
+    flex-direction: row;
+    row-gap: 10px;
 
-        .input_item {
-            margin-right: 5px;
-        }
+    .input_item {
+      margin-right: 5px;
+    }
+  }
+
+  .dashboard {
+    display: flex;
+
+    .chart_group {
+      display: flex;
+      align-items: center;
+      overflow: hidden;
     }
 
-    .dashboard {
+    .value_group {
+      display: grid;
+      grid-template-columns: repeat(
+        5,
+        1fr
+      ); // 5개의 열을 동일한 너비로 설정
+      width: 100%;
+      gap: 10px;
+
+      .item {
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        padding: 10px;
         display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
 
-        .chart_group {
-            display: flex;
-            align-items: center;
-            overflow: hidden;
+        .title {
+          display: flex;
+          align-items: center;
+          height: 50px;
         }
 
-        .value_group {
-            display: grid;
-            grid-template-columns: repeat(5, 1fr); // 5개의 열을 동일한 너비로 설정
-            width: 100%;
-            gap: 10px;
-
-            .item {
-                border: 1px solid #ccc;
-                border-radius: 10px;
-                padding: 10px;
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                justify-content: center;
-
-                .title {
-                    display: flex;
-                    align-items: center;
-                    height: 50px;
-                }
-
-                .value {
-                    display: flex;
-                    align-items: center;
-                    font-size: larger;
-                    font-weight: bold;
-                    height: 50px;
-                }
-            }
-
-            .bad_item {
-                color: red;
-            }
+        .value {
+          display: flex;
+          align-items: center;
+          font-size: larger;
+          font-weight: bold;
+          height: 50px;
         }
+      }
+
+      .bad_item {
+        color: red;
+      }
     }
+  }
 
-    .controller {
+  .controller {
+    display: flex;
+    gap: 20px;
+    justify-content: space-evenly;
+
+    .stat_group {
+      display: flex;
+      flex-direction: column;
+      row-gap: 5px;
+
+      .stat_item {
         display: flex;
-        gap: 20px;
-        justify-content: space-evenly;
+        gap: 5px;
 
-        .stat_group {
-            display: flex;
-            flex-direction: column;
-            row-gap: 5px;
-
-            .stat_item {
-                display: flex;
-                gap: 5px;
-
-                .stat_title {
-                    width: 150px;
-                    font-size: large;
-                }
-
-                .stat_value {
-                    font-size: large;
-                    margin: 0 5px 0 5px;
-                    width: 30px;
-                    text-align: center;
-                }
-
-                .stat_btn {
-                    width: 30px;
-                    height: 30px;
-                }
-            }
+        .stat_title {
+          width: 150px;
+          font-size: large;
         }
+
+        .stat_value {
+          font-size: large;
+          margin: 0 5px 0 5px;
+          width: 30px;
+          text-align: center;
+        }
+
+        .stat_btn {
+          width: 30px;
+          height: 30px;
+        }
+      }
     }
+  }
 }
 
 // 모바일 환경에서 한 줄에 두 개씩 표시하도록 설정
 @media (max-width: 768px) {
-    .bg {
+  .bg {
+    .controller {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
 
-        .controller {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
+      .stat_group {
+        display: flex;
+        flex-direction: column;
+        row-gap: 5px;
 
-            .stat_group {
-                display: flex;
-                flex-direction: column;
-                row-gap: 5px;
+        .stat_item {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          gap: 5px;
 
-                .stat_item {
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    gap: 5px;
+          .stat_title {
+            width: 100%;
+            font-size: large;
+            white-space: nowrap;
+          }
 
-                    .stat_title {
-                        width: 100%;
-                        font-size: large;
-                        white-space: nowrap;
-                    }
+          .stat_value {
+            width: 30px;
+            font-size: large;
+            margin: 0 5px 0 5px;
+          }
 
-                    .stat_value {
-                        width: 30px;
-                        font-size: large;
-                        margin: 0 5px 0 5px;
-                    }
-
-                    .stat_btn {
-                        width: 30px;
-                        height: 30px;
-                    }
-                }
-            }
+          .stat_btn {
+            width: 30px;
+            height: 30px;
+          }
         }
-
-        .dashboard {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-
-            .chart_group {
-                display: flex;
-                align-items: center;
-                justify-content: center;
-            }
-
-            .value_group {
-                display: flex;
-                flex-direction: column;
-                gap: 2px; // 아이템 간 간격 설정
-
-                .item {
-                    border: 1px solid #ccc;
-                    border-radius: 10px;
-                    display: flex;
-                    flex-direction: column;
-                    align-items: center;
-                    justify-content: center;
-
-                    .title {
-                        display: flex;
-                        white-space: nowrap;
-                        align-items: center;
-                        height: 20px;
-                        width: 100%;
-                        justify-content: center;
-                    }
-
-                    .value {
-                        display: flex;
-                        width: 100%;
-                        justify-content: center;
-                        align-items: center;
-                        font-size: larger;
-                        font-weight: bold;
-                        height: 30px;
-                    }
-                }
-
-                .bad_item {
-                    color: red;
-                }
-            }
-        }
-
-        .header {
-            display: flex;
-            flex-direction: row;
-            row-gap: 10px;
-            visibility: hidden;
-
-            .input_item {
-                margin-right: 5px;
-            }
-        }
+      }
     }
+
+    .dashboard {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+
+      .chart_group {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .value_group {
+        display: flex;
+        flex-direction: column;
+        gap: 2px; // 아이템 간 간격 설정
+
+        .item {
+          border: 1px solid #ccc;
+          border-radius: 10px;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+
+          .title {
+            display: flex;
+            white-space: nowrap;
+            align-items: center;
+            height: 20px;
+            width: 100%;
+            justify-content: center;
+          }
+
+          .value {
+            display: flex;
+            width: 100%;
+            justify-content: center;
+            align-items: center;
+            font-size: larger;
+            font-weight: bold;
+            height: 30px;
+          }
+        }
+
+        .bad_item {
+          color: red;
+        }
+      }
+    }
+
+    .header {
+      display: flex;
+      flex-direction: row;
+      row-gap: 10px;
+      visibility: hidden;
+
+      .input_item {
+        margin-right: 5px;
+      }
+    }
+  }
 }

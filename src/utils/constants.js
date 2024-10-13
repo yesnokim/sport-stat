@@ -1,2 +1,1 @@
-
-export const DB_COLLECTION_NAME = "matches"
+export const DB_COLLECTION_NAME = "matches";
