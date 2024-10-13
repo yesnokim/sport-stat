@@ -18,6 +18,20 @@ const Home = () => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  const [isMobile, setIsMobile] = useState(false);
+
+  // 화면 크기에 따라 isMobile 상태 설정
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768); // 768px 이하이면 모바일로 간주
+    };
+
+    handleResize(); // 초기 설정
+    window.addEventListener("resize", handleResize); // 화면 크기 변화 감지
+    return () =>
+      window.removeEventListener("resize", handleResize);
+  }, []);
+
   useEffect(() => {
     const auth = getAuth();
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -48,11 +62,13 @@ const Home = () => {
             onClick={() => navigate("/")}>
             Home
           </div>
-          <div
-            className={ss.menu_item}
-            onClick={() => navigate("/soccer-stat")}>
-            Enter stats
-          </div>
+          {isMobile ? null : (
+            <div
+              className={ss.menu_item}
+              onClick={() => navigate("/soccer-stat")}>
+              Enter stats
+            </div>
+          )}
         </div>
       </div>
       <div className={ss.contents}>
