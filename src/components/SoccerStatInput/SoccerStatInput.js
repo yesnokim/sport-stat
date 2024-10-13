@@ -186,6 +186,20 @@ const SoccerStatInput = ({
   const [matchPeriod, setMatchPeriod] =
     useState(initMatchPeriod); // 초기값을 설정
 
+  const [isMobile, setIsMobile] = useState(false);
+
+  // 화면 크기에 따라 isMobile 상태 설정
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768); // 768px 이하이면 모바일로 간주
+    };
+
+    handleResize(); // 초기 설정
+    window.addEventListener("resize", handleResize); // 화면 크기 변화 감지
+    return () =>
+      window.removeEventListener("resize", handleResize);
+  }, []);
+
   // matchData가 있으면 initialState와 병합
   useEffect(() => {
     if (matchData) {
@@ -250,20 +264,25 @@ const SoccerStatInput = ({
     stateKey,
     incrementType,
     decrementType,
+    showButton = true,
   }) => (
     <div className={ss.stat_item}>
       <div className={ss.stat_title}>{title}</div>
-      <button
-        className={ss.stat_btn}
-        onClick={() => dispatch({ type: decrementType })}>
-        -
-      </button>
+      {showButton && (
+        <button
+          className={ss.stat_btn}
+          onClick={() => dispatch({ type: decrementType })}>
+          -
+        </button>
+      )}
       <div className={ss.stat_value}>{state[stateKey]}</div>
-      <button
-        className={ss.stat_btn}
-        onClick={() => dispatch({ type: incrementType })}>
-        +
-      </button>
+      {showButton && (
+        <button
+          className={ss.stat_btn}
+          onClick={() => dispatch({ type: incrementType })}>
+          +
+        </button>
+      )}
     </div>
   );
 
@@ -313,12 +332,14 @@ const SoccerStatInput = ({
           <option value="3">3Q</option>
           <option value="4">4Q</option>
         </select>
-        <button
-          onClick={() => {
-            saveMatchResult();
-          }}>
-          SAVE
-        </button>
+        {!isMobile && (
+          <button
+            onClick={() => {
+              saveMatchResult();
+            }}>
+            SAVE
+          </button>
+        )}
       </div>
       {title && (
         <h3>{` vs ${title} (${matchDate}, ${matchPeriod})`}</h3>
