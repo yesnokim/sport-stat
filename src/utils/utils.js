@@ -134,7 +134,6 @@ export const calculateAttackingMidfielderScore = (
     failedDuel,
     shot,
     shotOnTarget,
-    turnover,
     intercept,
   } = playerStats;
 
