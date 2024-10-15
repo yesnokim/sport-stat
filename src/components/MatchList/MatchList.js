@@ -33,7 +33,28 @@ const ColDef = [
     header: "패스성공률",
     accessorFn: (row) => {
       const { passSuccessRate } = getPlayStat(row);
-      return `${passSuccessRate}%`;
+      return passSuccessRate;
+    },
+    cell: ({ getValue }) => {
+      const value = getValue();
+      let color = "";
+
+      console.log("getValue", getValue());
+
+      // 패스 성공률에 따른 색상 및 레이블 설정
+      if (value >= 90) {
+        color = "#006400"; // Dark Green
+      } else if (value >= 80) {
+        color = "#00008B"; // Navy
+      } else if (value >= 70) {
+        color = "#FF8C00"; // Dark Orange
+      } else if (value >= 60) {
+        color = "#8B4513"; // Brown
+      } else {
+        color = "red"; // Dark Red
+      }
+
+      return <span style={{ color }}>{value}%</span>;
     },
   },
   { header: "득점", accessorKey: "goal" },
@@ -47,7 +68,7 @@ const ColDef = [
       const value = getValue(); // 현재 셀의 값 가져오기
       return (
         <span
-          style={{ color: value < 50 ? "red" : "black" }}>
+          style={{ color: value > 4 ? "red" : "black" }}>
           {value}
         </span>
       );
