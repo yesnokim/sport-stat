@@ -38,6 +38,21 @@ const ColDef = [
   },
   { header: "득점", accessorKey: "goal" },
   { header: "도움", accessorKey: "assist" },
+  { header: "키패스", accessorKey: "keyPass" },
+  { header: "인터셉트", accessorKey: "intercept" },
+  {
+    header: "턴오버",
+    accessorKey: "turnover",
+    cell: ({ getValue }) => {
+      const value = getValue(); // 현재 셀의 값 가져오기
+      return (
+        <span
+          style={{ color: value < 50 ? "red" : "black" }}>
+          {value}
+        </span>
+      );
+    },
+  },
   {
     header: "보기",
     cell: ({ row }) => (
