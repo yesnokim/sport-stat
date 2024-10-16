@@ -20,7 +20,7 @@ const ColDef = [
       return formattedDate; // YYYY-MM-DD 형식으로 날짜 표시
     },
   },
-  { header: "제목", accessorKey: "title" },
+  { header: "상대팀", accessorKey: "title" },
   { header: "쿼터", accessorKey: "matchPeriod" },
   {
     header: "볼터치",
@@ -75,7 +75,7 @@ const ColDef = [
     },
   },
   {
-    header: "보기",
+    header: "상세보기",
     cell: ({ row }) => (
       <Link to={`/soccer-stat?matchId=${row.original.id}`}>
         보기

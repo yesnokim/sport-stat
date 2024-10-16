@@ -264,7 +264,7 @@ const SoccerStatInput = ({
     stateKey,
     incrementType,
     decrementType,
-    showButton = true,
+    showButton = !isMobile,
   }) => (
     <div className={ss.stat_item}>
       <div className={ss.stat_title}>{title}</div>
@@ -309,38 +309,40 @@ const SoccerStatInput = ({
 
   return (
     <div className={ss.bg}>
-      <div className={ss.header}>
-        <input
-          className={ss.input_item}
-          type="datetime-local"
-          value={matchDate}
-          onChange={handleDateChange}
-        />
-        <input
-          className={ss.input_item}
-          type="text"
-          value={title}
-          onChange={handleTitleChange}
-          placeholder="예) 대구ㅇㅇ초"
-        />
-        <select
-          className={ss.input_item}
-          value={matchPeriod}
-          onChange={handleChange}>
-          <option value="전반">전반</option>
-          <option value="후반">후반</option>
-          <option value="3">3Q</option>
-          <option value="4">4Q</option>
-        </select>
-        {!isMobile && (
-          <button
-            onClick={() => {
-              saveMatchResult();
-            }}>
-            SAVE
-          </button>
-        )}
-      </div>
+      {!isMobile && (
+        <div className={ss.header}>
+          <input
+            className={ss.input_item}
+            type="datetime-local"
+            value={matchDate}
+            onChange={handleDateChange}
+          />
+          <input
+            className={ss.input_item}
+            type="text"
+            value={title}
+            onChange={handleTitleChange}
+            placeholder="예) 대구ㅇㅇ초"
+          />
+          <select
+            className={ss.input_item}
+            value={matchPeriod}
+            onChange={handleChange}>
+            <option value="전반">전반</option>
+            <option value="후반">후반</option>
+            <option value="3">3Q</option>
+            <option value="4">4Q</option>
+          </select>
+          {!isMobile && (
+            <button
+              onClick={() => {
+                saveMatchResult();
+              }}>
+              SAVE
+            </button>
+          )}
+        </div>
+      )}
       {title && (
         <h3>{` vs ${title} (${matchDate}, ${matchPeriod})`}</h3>
       )}
@@ -431,7 +433,7 @@ const SoccerStatInput = ({
           />
         </div>
         <div className={ss.stat_group}>
-          <h3>기회창출</h3>
+          <h3>공격력</h3>
           <StatItem
             title="Assists"
             stateKey="assist"

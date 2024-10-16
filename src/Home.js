@@ -57,11 +57,11 @@ const Home = () => {
           <ProfileImage />
         </div>
         <div className={ss.menu}>
-          <div
+          {/* <div
             className={ss.menu_item}
             onClick={() => navigate("/")}>
             Home
-          </div>
+          </div> */}
           {isMobile ? null : (
             <div
               className={ss.menu_item}
