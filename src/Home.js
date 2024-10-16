@@ -4,6 +4,7 @@ import {
   Navigate,
   Route,
   Routes,
+  useLocation,
   useNavigate,
 } from "react-router-dom";
 import ProfileImage from "./components/ProfileImage/ProfileImage";
@@ -14,6 +15,7 @@ import SoccerStat from "./pages/SoccerStat/SoccerStat";
 
 const Home = () => {
   const navigate = useNavigate();
+  const location = useLocation();
 
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -57,11 +59,14 @@ const Home = () => {
           <ProfileImage />
         </div>
         <div className={ss.menu}>
-          {/* <div
-            className={ss.menu_item}
-            onClick={() => navigate("/")}>
-            Home
-          </div> */}
+          {/* Home 버튼은 현재 경로가 '/'일 때 표시되지 않음 */}
+          {location.pathname !== "/" && (
+            <div
+              className={ss.menu_item}
+              onClick={() => navigate("/")}>
+              Home
+            </div>
+          )}
           {isMobile ? null : (
             <div
               className={ss.menu_item}
