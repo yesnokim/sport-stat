@@ -5,11 +5,17 @@ import {
   getSortedRowModel,
   getFilteredRowModel,
   getPaginationRowModel,
+  getExpandedRowModel,
   flexRender,
 } from "@tanstack/react-table";
 import ss from "./BaseTable.module.scss";
 
-const BaseTable = ({ columns = [], data = [] }) => {
+const BaseTable = ({
+  columns = [],
+  data = [],
+  getRowCanExpand = () => false,
+  renderSubComponent = () => null,
+}) => {
   // 테이블 생성
   const table = useReactTable({
     columns,
@@ -23,6 +29,8 @@ const BaseTable = ({ columns = [], data = [] }) => {
         pageSize: 10, // 기본 페이지 사이즈 설정
       },
     },
+    getExpandedRowModel: getExpandedRowModel(),
+    getRowCanExpand,
   });
   // 페이지 수 및 현재 페이지를 가져옴
   const pageCount = table.getPageCount();
@@ -97,20 +105,33 @@ const BaseTable = ({ columns = [], data = [] }) => {
           </thead>
           <tbody className={ss.table_body}>
             {table.getRowModel().rows.map((row) => (
-              <tr
-                key={row.id}
-                className={ss.table_row}>
-                {row.getVisibleCells().map((cell) => (
-                  <td
-                    key={cell.id}
-                    className={ss.table_cell}>
-                    {flexRender(
-                      cell.column.columnDef.cell,
-                      cell.getContext()
-                    )}
-                  </td>
-                ))}
-              </tr>
+              <>
+                <tr
+                  key={row.id}
+                  className={ss.table_row}>
+                  {row.getVisibleCells().map((cell) => (
+                    <td
+                      key={cell.id}
+                      className={ss.table_cell}>
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
+                    </td>
+                  ))}
+                </tr>
+                {row.getIsExpanded() && (
+                  <tr>
+                    {/* 2nd row is a custom 1 cell row */}
+                    <td
+                      colSpan={
+                        row.getVisibleCells().length
+                      }>
+                      {renderSubComponent({ row })}
+                    </td>
+                  </tr>
+                )}
+              </>
             ))}
           </tbody>
         </table>
