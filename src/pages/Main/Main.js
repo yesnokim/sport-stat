@@ -241,7 +241,7 @@ const Main = () => {
                     )
                   }
                 />
-                쿼터별
+                세션별
               </label>
 
               <label>
