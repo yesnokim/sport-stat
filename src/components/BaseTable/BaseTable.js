@@ -28,51 +28,53 @@ const BaseTable = ({ columns = [], data = [] }) => {
   return (
     <div className={ss.bg}>
       {/* 테이블 렌더링 */}
-      <table className={ss.base_table}>
-        <thead>
-          {table.getHeaderGroups().map((headerGroup) => (
-            <tr
-              key={headerGroup.id}
-              className={ss.table_header}>
-              {headerGroup.headers.map((header) => (
-                <th
-                  key={header.id}
-                  className={ss.table_header_cell}
-                  onClick={header.column.getToggleSortingHandler()}>
-                  {flexRender(
-                    header.column.columnDef.header,
-                    header.getContext()
-                  )}
-                  {header.column.getIsSorted()
-                    ? header.column.getIsSorted() === "desc"
-                      ? " 🔽"
-                      : " 🔼"
-                    : null}
-                </th>
-              ))}
-            </tr>
-          ))}
-        </thead>
-        <tbody className={ss.table_body}>
-          {table.getRowModel().rows.map((row) => (
-            <tr
-              key={row.id}
-              className={ss.table_row}>
-              {row.getVisibleCells().map((cell) => (
-                <td
-                  key={cell.id}
-                  className={ss.table_cell}>
-                  {flexRender(
-                    cell.column.columnDef.cell,
-                    cell.getContext()
-                  )}
-                </td>
-              ))}
-            </tr>
-          ))}
-        </tbody>
-      </table>
-
+      <div className={ss.table_box}>
+        <table className={ss.base_table}>
+          <thead>
+            {table.getHeaderGroups().map((headerGroup) => (
+              <tr
+                key={headerGroup.id}
+                className={ss.table_header}>
+                {headerGroup.headers.map((header) => (
+                  <th
+                    key={header.id}
+                    className={ss.table_header_cell}
+                    onClick={header.column.getToggleSortingHandler()}>
+                    {flexRender(
+                      header.column.columnDef.header,
+                      header.getContext()
+                    )}
+                    {header.column.getIsSorted()
+                      ? header.column.getIsSorted() ===
+                        "desc"
+                        ? " 🔽"
+                        : " 🔼"
+                      : null}
+                  </th>
+                ))}
+              </tr>
+            ))}
+          </thead>
+          <tbody className={ss.table_body}>
+            {table.getRowModel().rows.map((row) => (
+              <tr
+                key={row.id}
+                className={ss.table_row}>
+                {row.getVisibleCells().map((cell) => (
+                  <td
+                    key={cell.id}
+                    className={ss.table_cell}>
+                    {flexRender(
+                      cell.column.columnDef.cell,
+                      cell.getContext()
+                    )}
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
       {/* 페이징 컨트롤 */}
       <div className={ss.pagination_controls}>
         <button
