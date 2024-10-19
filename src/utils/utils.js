@@ -1,5 +1,5 @@
-import { groupBy, sumBy, orderBy } from "lodash";
 import { format } from "date-fns"; // 날짜 처리 용이성을 위해 date-fns 사용
+import { groupBy, orderBy, sumBy } from "lodash";
 
 // Timestamp를 'YYYY-MM-DD' 형식으로 변환하는 함수
 export const formatDate = (timestamp) => {
@@ -186,5 +186,83 @@ export const calculateAttackingMidfielderScore = (
     totalShots * 0.05 + // 총 슈팅 시도
     pressureSuccessRate * 0.025; // 압박 성공률
 
-  return Math.min(attackingScore, 100); // 점수는 최대 100점
+  return Math.min(attackingScore.toFixed(2), 100); // 점수는 최대 100점
+};
+
+export const calculateOverallRating = (playerStats) => {
+  const {
+    forwardPass,
+    sidePass,
+    backPass,
+    failedPass,
+    keyPass,
+    assist,
+    goal,
+    dribble,
+    failedDribble,
+    successfulDuel,
+    failedDuel,
+    shot,
+    shotOnTarget,
+    turnover,
+    intercept,
+    pressure, // 압박 횟수 추가
+  } = playerStats;
+
+  // 패스 성공률 계산
+  const totalPasses =
+    forwardPass + sidePass + backPass + failedPass;
+  const passSuccessRate =
+    totalPasses > 0
+      ? ((forwardPass + sidePass + backPass) /
+          totalPasses) *
+        100
+      : 0;
+
+  // 드리블 성공률 계산
+  const totalDribbles = dribble + failedDribble;
+  const dribbleSuccessRate =
+    totalDribbles > 0 ? (dribble / totalDribbles) * 100 : 0;
+
+  // 듀얼 성공률 계산
+  const totalDuels = successfulDuel + failedDuel;
+  const duelSuccessRate =
+    totalDuels > 0
+      ? (successfulDuel / totalDuels) * 100
+      : 0;
+
+  // 압박 성공률 계산
+  const totalPressures = intercept + pressure + totalDuels;
+  const pressureSuccessRate =
+    totalPressures > 0
+      ? ((intercept + successfulDuel + pressure) /
+          totalPressures) *
+        100
+      : 0;
+
+  // 슈팅 정확도 계산
+  const totalShots = shot;
+  const shotAccuracy =
+    totalShots > 0 ? (shotOnTarget / totalShots) * 100 : 0;
+
+  // 득점 능력과 기회 창출 계산
+  const scoringAbility =
+    goal * 10 + keyPass * 5 + assist * 10;
+
+  // 공격력 계산 (100점 만점)
+  const attackingScore =
+    passSuccessRate * 0.4 + // 패스 능력 (패스 성공률 반영)
+    scoringAbility * 0.4 + // 득점 및 기회 창출 능력
+    dribbleSuccessRate * 0.05 + // 드리블 성공률
+    duelSuccessRate * 0.05 + // 듀얼 성공률
+    shotAccuracy * 0.02 + // 슈팅 정확도
+    totalShots * 0.03 + // 총 슈팅 시도
+    pressureSuccessRate * 0.05 + // 압박 성공률
+    intercept * 0.05 - // 인터셉트는 긍정적 기여
+    turnover * 0.1; // 턴오버는 감점 요소
+
+  // 100점 만점에서 10점 만점으로 변환
+  return attackingScore > 100
+    ? 10
+    : (attackingScore / 10).toFixed(1);
 };

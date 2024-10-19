@@ -1,5 +1,8 @@
 import { Link } from "react-router-dom";
-import { getPlayStat } from "../../utils/utils";
+import {
+  calculateOverallRating,
+  getPlayStat,
+} from "../../utils/utils";
 import BaseTable from "../BaseTable/BaseTable";
 import ss from "./MatchList.module.scss";
 
@@ -23,10 +26,63 @@ const ColDef = [
   { header: "상대팀", accessorKey: "title" },
   { header: "쿼터", accessorKey: "matchPeriod" },
   {
+    header: "평점",
+    accessorFn: (row) => {
+      const overall = calculateOverallRating(row);
+      return overall;
+    },
+    cell: ({ getValue }) => {
+      const value = getValue();
+      let color = "";
+
+      // 패스 성공률에 따른 색상 및 레이블 설정
+      if (value >= 7) {
+        color = "#006400"; // Dark Green
+      } else if (value >= 6) {
+        color = "#00008B"; // Navy
+      } else if (value >= 5) {
+        color = "#FF8C00"; // Dark Orange
+      } else if (value >= 4) {
+        color = "#8B4513"; // Brown
+      } else {
+        color = "red"; // Dark Red
+      }
+
+      return (
+        <span style={{ color, fontWeight: "bold" }}>
+          {value}
+        </span>
+      );
+    },
+  },
+  {
     header: "볼터치",
     accessorFn: (row) => {
       const { ballTouches } = getPlayStat(row);
       return ballTouches;
+    },
+    cell: ({ getValue }) => {
+      const value = getValue();
+      let color = "";
+
+      // 패스 성공률에 따른 색상 및 레이블 설정
+      if (value >= 23) {
+        color = "#006400"; // Dark Green
+      } else if (value >= 20) {
+        color = "#00008B"; // Navy
+      } else if (value >= 15) {
+        color = "#FF8C00"; // Dark Orange
+      } else if (value >= 10) {
+        color = "#8B4513"; // Brown
+      } else {
+        color = "red"; // Dark Red
+      }
+
+      return (
+        <span style={{ color, fontWeight: "bold" }}>
+          {value}
+        </span>
+      );
     },
   },
   {
@@ -38,8 +94,6 @@ const ColDef = [
     cell: ({ getValue }) => {
       const value = getValue();
       let color = "";
-
-      console.log("getValue", getValue());
 
       // 패스 성공률에 따른 색상 및 레이블 설정
       if (value >= 90) {
@@ -54,7 +108,11 @@ const ColDef = [
         color = "red"; // Dark Red
       }
 
-      return <span style={{ color }}>{value}%</span>;
+      return (
+        <span style={{ color, fontWeight: "bold" }}>
+          {value}%
+        </span>
+      );
     },
   },
   { header: "득점", accessorKey: "goal" },
