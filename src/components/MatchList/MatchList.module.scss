@@ -35,6 +35,11 @@
       }
     }
   }
+
+  .sub_render_row {
+    display: "flex";
+    justify-content: "center";
+  }
 }
 
 @media (max-width: 768px) {
@@ -76,5 +81,10 @@
         }
       }
     }
+  }
+  .sub_render_row {
+    width: 90vw;
+    display: "flex";
+    justify-content: "center";
   }
 }

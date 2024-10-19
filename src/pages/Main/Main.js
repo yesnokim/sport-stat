@@ -4,10 +4,12 @@ import {
   orderBy,
   query,
 } from "firebase/firestore";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import BarChart from "../../components/BarChart/BarChart";
 import LineChart from "../../components/LineChart/LineChart";
-import MatchList from "../../components/MatchList/MatchList";
+import MatchList, {
+  MATCH_COLUMN_TYPES,
+} from "../../components/MatchList/MatchList";
 import MixedChart from "../../components/MixedChart/MixedChart";
 import SignOutButton from "../../components/SignOutButton/SignOutButton";
 import { db } from "../../firebase";
@@ -20,9 +22,16 @@ import {
 } from "../../utils/utils";
 import ss from "./Main.module.scss";
 
+const MATCH_LIST_TYPES = {
+  QUARTER: "quarter",
+  GAME: "game",
+};
+
 const Main = () => {
   const [matchData, setMatchData] = useState([]);
   const [processedData, setProcessedData] = useState([]);
+  const [selectedMatchType, setSelectedMatchListType] =
+    useState(MATCH_LIST_TYPES.QUARTER);
 
   // Firestore에서 데이터를 불러오는 함수
   const fetchMatches = async () => {
@@ -51,6 +60,27 @@ const Main = () => {
   useEffect(() => {
     fetchMatches();
   }, []);
+
+  const getMatchData = useCallback(() => {
+    switch (selectedMatchType) {
+      case MATCH_LIST_TYPES.GAME:
+        return processedData;
+      case MATCH_LIST_TYPES.QUARTER:
+        return matchData;
+      default:
+        return [];
+    }
+  }, [matchData, processedData, selectedMatchType]);
+
+  const getMatchColumnDef = useCallback(() => {
+    switch (selectedMatchType) {
+      case MATCH_LIST_TYPES.GAME:
+        return MATCH_COLUMN_TYPES.GAME;
+      case MATCH_LIST_TYPES.QUARTER:
+      default:
+        return MATCH_COLUMN_TYPES.QUARTER;
+    }
+  }, [selectedMatchType]);
 
   return (
     <div className={ss.bg}>
@@ -192,9 +222,51 @@ const Main = () => {
           </div>
         </div>
         <div className={ss.match_list}>
-          <div className={ss.title}>경기목록 및 통계</div>
+          <div className={ss.title_box}>
+            <div className={ss.title}>
+              경기목록 및 통계 (상세)
+            </div>
+            <div className={ss.radio_buttons}>
+              <label>
+                <input
+                  type="radio"
+                  value={MATCH_LIST_TYPES.QUARTER}
+                  checked={
+                    selectedMatchType ===
+                    MATCH_LIST_TYPES.QUARTER
+                  }
+                  onChange={() =>
+                    setSelectedMatchListType(
+                      MATCH_LIST_TYPES.QUARTER
+                    )
+                  }
+                />
+                쿼터별
+              </label>
+
+              <label>
+                <input
+                  type="radio"
+                  value={MATCH_LIST_TYPES.GAME}
+                  checked={
+                    selectedMatchType ===
+                    MATCH_LIST_TYPES.GAME
+                  }
+                  onChange={() =>
+                    setSelectedMatchListType(
+                      MATCH_LIST_TYPES.GAME
+                    )
+                  }
+                />
+                게임별
+              </label>
+            </div>
+          </div>
           <div className={ss.content}>
-            <MatchList data={matchData} />
+            <MatchList
+              data={getMatchData()}
+              colDef={getMatchColumnDef()}
+            />
           </div>
         </div>
       </div>
