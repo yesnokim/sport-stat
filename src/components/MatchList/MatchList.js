@@ -6,8 +6,29 @@ import {
 } from "../../utils/utils";
 import BaseTable from "../BaseTable/BaseTable";
 import ss from "./MatchList.module.scss";
+import RadarChart from "../RadarChart/RadarChart";
+import { FaAngleDown, FaAngleRight } from "react-icons/fa"; // 펼치기 아이콘
 
 const ColDef = [
+  {
+    id: "expander",
+    header: () => null,
+    cell: ({ row }) => {
+      return row.getCanExpand() ? (
+        <div
+          {...{
+            onClick: row.getToggleExpandedHandler(),
+            style: { cursor: "pointer" },
+          }}>
+          {row.getIsExpanded() ? (
+            <FaAngleDown className={ss.expand_icon} />
+          ) : (
+            <FaAngleRight className={ss.expand_icon} />
+          )}
+        </div>
+      ) : null;
+    },
+  },
   {
     header: "날짜",
     cell: ({ row }) => {
@@ -169,6 +190,22 @@ const MatchList = ({ data }) => {
       <BaseTable
         columns={ColDef}
         data={data}
+        getRowCanExpand={() => true}
+        renderSubComponent={({ row }) => {
+          return (
+            <div
+              style={{
+                width: "90vw",
+                display: "flex",
+                justifyContent: "center",
+              }}>
+              <RadarChart
+                playerState={row.original}
+                playerName={row.original?.playerName}
+              />
+            </div>
+          );
+        }}
       />
     </div>
   );
