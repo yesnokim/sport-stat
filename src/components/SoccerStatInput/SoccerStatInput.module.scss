@@ -1,12 +1,36 @@
 .bg {
   .header {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
+    flex-wrap: wrap;
     row-gap: 10px;
 
-    .input_item {
-      margin-right: 5px;
+    .basic_info {
+      .input_item {
+        margin-right: 5px;
+      }
     }
+
+    .additional_info {
+      .input_item {
+        margin-right: 5px;
+      }
+    }
+
+    .save_btn {
+      width: 100px;
+    }
+  }
+
+  .title {
+    display: flex;
+    align-items: center;
+    .video_url {
+       display: flex;
+       margin-left: 10px;
+       color: red;
+       font-size: x-large;
+     }
   }
 
   .dashboard {
@@ -112,6 +136,15 @@
 // 모바일 환경에서 한 줄에 두 개씩 표시하도록 설정
 @media (max-width: 768px) {
   .bg {
+
+    .title {
+    display: flex;
+    .video_url {
+       display: flex;
+       color: red;
+       font-size: x-large;
+     }
+  }
     .controller {
       display: flex;
       flex-direction: column;

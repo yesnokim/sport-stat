@@ -1,3 +1,4 @@
+import { FaYoutube } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import {
   calculateOverallRating,
@@ -135,9 +136,29 @@ const ColDef = [
   {
     header: "상세보기",
     cell: ({ row }) => (
-      <Link to={`/soccer-stat?matchId=${row.original.id}`}>
-        보기
-      </Link>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+        }}>
+        <Link
+          to={`/soccer-stat?matchId=${row.original.id}`}>
+          보기
+        </Link>
+        {row.original.videoUrl && (
+          <a
+            href={row.original.videoUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              marginTop: "10px",
+              color: "red",
+              fontSize: "large",
+            }}>
+            <FaYoutube />
+          </a>
+        )}
+      </div>
     ),
   },
 ];
