@@ -45,6 +45,8 @@ const SoccerStat = () => {
           matchData?.matchDate.toDate()
         )}
         initMatchPeriod={matchData?.matchPeriod}
+        initVideoUrl={matchData?.videoUrl}
+        initPlaytime={matchData?.playtime}
         matchData={matchData}
       />
     </div>

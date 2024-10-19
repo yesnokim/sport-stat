@@ -1,5 +1,6 @@
 import { doc, setDoc, Timestamp } from "firebase/firestore";
 import { useEffect, useReducer, useState } from "react";
+import { FaYoutube } from "react-icons/fa";
 import { db } from "../../firebase";
 import { DB_COLLECTION_NAME } from "../../utils/constants";
 import {
@@ -186,6 +187,7 @@ const SoccerStatInput = ({
   initMatchDate = "",
   initPlaytime = "",
   initMatchPeriod = "전반",
+  initVideoUrl = "",
 }) => {
   const [state, dispatch] = useReducer(
     reducer,
@@ -196,6 +198,7 @@ const SoccerStatInput = ({
   const [matchDate, setMatchDate] = useState(initMatchDate);
   const [matchPeriod, setMatchPeriod] =
     useState(initMatchPeriod); // 초기값을 설정
+  const [videoUrl, setVideoUrl] = useState(initVideoUrl); // 초기값을 설정
 
   const [isMobile, setIsMobile] = useState(false);
 
@@ -238,6 +241,10 @@ const SoccerStatInput = ({
     setMatchDate(e.target.value);
   };
 
+  const handleVideoUrlChange = (e) => {
+    setVideoUrl(e.target.value);
+  };
+
   const saveMatchResult = async () => {
     const isConfirmed =
       window.confirm("정말 저장하시겠습니까?");
@@ -255,6 +262,7 @@ const SoccerStatInput = ({
         matchPeriod,
         playerName,
         playtime,
+        videoUrl,
         ...state, // 경기 관련 통계 (useReducer로 관리하는 state)
       };
 
@@ -338,48 +346,75 @@ const SoccerStatInput = ({
     <div className={ss.bg}>
       {!isMobile && (
         <div className={ss.header}>
-          <input
-            className={ss.input_item}
-            type="datetime-local"
-            value={matchDate}
-            onChange={handleDateChange}
-          />
-          <input
-            className={ss.input_item}
-            type="text"
-            value={title}
-            onChange={handleTitleChange}
-            placeholder="예) 대구ㅇㅇ초"
-          />
-          <input
-            className={ss.input_item}
-            type="number"
-            value={playtime}
-            onChange={handlePlaytimeChange}
-            placeholder="출전시간(단위:분)"
-          />
-          <select
-            className={ss.input_item}
-            value={matchPeriod}
-            onChange={handleChange}>
-            <option value="전반">전반</option>
-            <option value="후반">후반</option>
-            <option value="3">3Q</option>
-            <option value="4">4Q</option>
-          </select>
-          {!isMobile && (
-            <button
-              onClick={() => {
-                saveMatchResult();
-              }}>
-              SAVE
-            </button>
-          )}
+          <div className={ss.basic_info}>
+            <input
+              className={ss.input_item}
+              type="datetime-local"
+              value={matchDate}
+              onChange={handleDateChange}
+            />
+            <input
+              className={ss.input_item}
+              type="text"
+              value={title}
+              onChange={handleTitleChange}
+              placeholder="예) 대구ㅇㅇ초"
+            />
+            <select
+              className={ss.input_item}
+              value={matchPeriod}
+              onChange={handleChange}>
+              <option value="전반">전반</option>
+              <option value="후반">후반</option>
+              <option value="3">3Q</option>
+              <option value="4">4Q</option>
+            </select>
+          </div>
+          <div className={ss.additional_info}>
+            <input
+              className={ss.input_item}
+              type="number"
+              value={playtime}
+              onChange={handlePlaytimeChange}
+              placeholder="출전시간(단위:분)"
+            />
+            <input
+              className={ss.input_item}
+              style={{ width: "300px" }}
+              type="text"
+              value={videoUrl}
+              onChange={handleVideoUrlChange}
+              placeholder="https://www.youtube.com/watch?..."
+            />
+            {!isMobile && (
+              <button
+                className={ss.save_btn}
+                onClick={() => {
+                  saveMatchResult();
+                }}>
+                SAVE
+              </button>
+            )}
+          </div>
         </div>
       )}
-      {title && (
-        <h3>{` vs ${title} (${matchDate}, ${matchPeriod})`}</h3>
-      )}
+      <div className={ss.title}>
+        {title && (
+          <h3>{` vs ${title} (${matchDate}, ${matchPeriod})`}</h3>
+        )}
+        {videoUrl && (
+          <div>
+            <a
+              href={videoUrl}
+              target="_blank" // 새 창에서 링크 열기
+              rel="noopener noreferrer" // 보안 설정
+              className={ss.video_url} // 아이콘 스타일 설정
+            >
+              <FaYoutube />
+            </a>
+          </div>
+        )}
+      </div>
       <div className={ss.dashboard}>
         <div className={ss.chart_group}>
           <div className={ss.chart_item}>
