@@ -1,23 +1,19 @@
-import {
-  BarElement,
-  CategoryScale,
-  Chart as ChartJS,
-  Legend,
-  LinearScale,
-  LineElement,
-  PointElement,
-  Title,
-  Tooltip,
-} from "chart.js";
 import React, { useEffect, useState } from "react";
 import { Bar } from "react-chartjs-2";
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+} from "chart.js";
 
-// Chart.js 필수 플러그인 등록
+// ChartJS 필수 플러그인 등록
 ChartJS.register(
   CategoryScale,
   LinearScale,
-  PointElement,
-  LineElement,
   BarElement,
   Title,
   Tooltip,
@@ -38,14 +34,12 @@ const chartColors = [
   "rgba(99, 255, 132, 0.8)", // 연두색
 ];
 
-const MixedChart = ({
+const BarChart = ({
   data,
   xAxisFn,
   xAxisMobileFn,
-  yLineFns = [],
-  yBarFns = [],
-  labelsLine = [],
-  labelsBar,
+  yAxisFns,
+  labels,
   title,
 }) => {
   const [isMobile, setIsMobile] = useState(false);
@@ -62,42 +56,26 @@ const MixedChart = ({
       window.removeEventListener("resize", handleResize);
   }, []);
 
+  // Firestore 쿼리 결과에서 x축, y축에 사용할 데이터를 추출
   const chartData = {
-    type: "bar",
     labels: isMobile
       ? data.map(xAxisMobileFn)
       : data.map(xAxisFn), // X축 데이터
-    datasets: [
-      // Line Chart에 해당하는 데이터셋들
-      ...yLineFns.map((yLineFn, index) => ({
-        type: "line",
-        label: labelsLine[index],
-        data: data.map(yLineFn),
-        fill: false,
-        backgroundColor:
-          chartColors[index % chartColors.length], // 고정된 색상 셋트
-        borderColor:
-          chartColors[index % chartColors.length], // 동일한 색상 사용
-        tension: 0.1,
-        yAxisID: "y", // Line Chart 전용 Y축
-      })),
-      // Bar Chart에 해당하는 데이터셋들
-      ...yBarFns.map((yBarFn, index) => ({
-        //   type: "bar",
-        label: labelsBar[index],
-        data: data.map(yBarFn),
-        backgroundColor:
-          chartColors[
-            (index + yLineFns.length) % chartColors.length
-          ], // 고정된 색상 셋트
-        borderColor: "rgba(55,55,55,1)", // 동일한 색상 사용
-        borderWidth: 1,
-        yAxisID: "y1", // Bar Chart 전용 Y축
-      })),
-    ],
+    datasets: yAxisFns.map((yAxisFn, index) => {
+      const backgroundColor =
+        chartColors[index % chartColors.length];
+      const borderColor = backgroundColor;
+      return {
+        label: labels[index], // 각 yAxis 데이터의 이름을 label로 사용
+        data: data.map(yAxisFn), // 각 yAxisFn으로 y축 값 추출
+        backgroundColor: backgroundColor, // 랜덤 배경색
+        borderColor: borderColor, // 랜덤 테두리 색
+        borderWidth: 1, // 테두리 두께
+      };
+    }),
   };
 
-  // 옵션 설정
+  // 옵션 설정 (선택 사항)
   const options = {
     responsive: true,
     maintainAspectRatio: false, // 기본 가로세로 비율 유지하지 않음
@@ -112,16 +90,14 @@ const MixedChart = ({
       },
     },
     scales: {
-      y: {
-        type: "linear",
-        position: "left", // Line chart 전용 Y축,
-      },
-      y1: {
-        type: "linear",
-        position: "right", // Bar chart 전용 Y축
-        grid: {
-          drawOnChartArea: false, // 왼쪽 Y축과 중첩되지 않도록 설정
+      x: {
+        ticks: {
+          maxRotation: 90, // X축 레이블의 최대 회전
+          minRotation: 45, // X축 레이블의 최소 회전
         },
+      },
+      y: {
+        beginAtZero: true, // Y축 0부터 시작
       },
     },
   };
@@ -134,4 +110,4 @@ const MixedChart = ({
   );
 };
 
-export default MixedChart;
+export default BarChart;
