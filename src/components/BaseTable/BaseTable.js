@@ -25,6 +25,15 @@ const BaseTable = ({ columns = [], data = [] }) => {
     },
   });
 
+  // 페이지 번호 리스트 생성 함수
+  const pageNumbers = () => {
+    const pages = [];
+    for (let i = 0; i < table.getPageCount(); i++) {
+      pages.push(i);
+    }
+    return pages;
+  };
+
   return (
     <div className={ss.bg}>
       {/* 테이블 렌더링 */}
@@ -89,6 +98,24 @@ const BaseTable = ({ columns = [], data = [] }) => {
             {table.getPageCount()}
           </strong>
         </span>
+        {/* 페이지 번호 표시 */}
+        {pageNumbers().map((pageIndex) => (
+          <button
+            key={pageIndex}
+            onClick={() => table.setPageIndex(pageIndex)}
+            disabled={
+              pageIndex ===
+              table.getState().pagination.pageIndex
+            } // 현재 페이지는 비활성화
+            className={
+              pageIndex ===
+              table.getState().pagination.pageIndex
+                ? ss.active_page
+                : ""
+            }>
+            {pageIndex + 1}
+          </button>
+        ))}
         <button
           onClick={() => table.nextPage()}
           disabled={!table.getCanNextPage()}>

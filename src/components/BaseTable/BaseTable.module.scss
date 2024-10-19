@@ -47,5 +47,12 @@
       .page_size_selector {
         height: 30px;
       }
+
+      .active_page {
+        background-color: #007bff;
+        color: white;
+        font-weight: bold;
+        border-color: #007bff;
+      }
     }
 }
