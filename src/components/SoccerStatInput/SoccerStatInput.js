@@ -2,7 +2,11 @@ import { doc, setDoc, Timestamp } from "firebase/firestore";
 import { useEffect, useReducer, useState } from "react";
 import { db } from "../../firebase";
 import { DB_COLLECTION_NAME } from "../../utils/constants";
-import { getPlayStat } from "../../utils/utils";
+import {
+  calculateAttackingMidfielderScore,
+  calculateOverallRating,
+  getPlayStat,
+} from "../../utils/utils";
 import RadarChart from "../RadarChart/RadarChart";
 import ss from "./SoccerStatInput.module.scss";
 
@@ -152,6 +156,11 @@ function reducer(state, action) {
     case "DECREMENT_INTERCEPT":
       return { ...state, intercept: state.intercept - 1 };
 
+    case "INCREMENT_PRESSURE":
+      return { ...state, pressure: state.pressure + 1 };
+    case "DECREMENT_PRESSURE":
+      return { ...state, pressure: state.pressure - 1 };
+
     case "INCREMENT_SHOT_ON_TARGET":
       return {
         ...state,
@@ -175,6 +184,7 @@ const SoccerStatInput = ({
   matchData,
   initTitle = "",
   initMatchDate = "",
+  initPlaytime = "",
   initMatchPeriod = "전반",
 }) => {
   const [state, dispatch] = useReducer(
@@ -182,6 +192,7 @@ const SoccerStatInput = ({
     initialState
   );
   const [title, setTitle] = useState(initTitle);
+  const [playtime, setPlaytime] = useState(initPlaytime);
   const [matchDate, setMatchDate] = useState(initMatchDate);
   const [matchPeriod, setMatchPeriod] =
     useState(initMatchPeriod); // 초기값을 설정
@@ -219,6 +230,10 @@ const SoccerStatInput = ({
     setTitle(e.target.value?.trim?.());
   };
 
+  const handlePlaytimeChange = (e) => {
+    setPlaytime(e.target.value);
+  };
+
   const handleDateChange = (e) => {
     setMatchDate(e.target.value);
   };
@@ -239,6 +254,7 @@ const SoccerStatInput = ({
         matchDate: matchTimestamp,
         matchPeriod,
         playerName,
+        playtime,
         ...state, // 경기 관련 통계 (useReducer로 관리하는 state)
       };
 
@@ -288,6 +304,7 @@ const SoccerStatInput = ({
 
   const DashboardItem = ({
     title,
+    subTitle,
     value,
     isBad,
     suffix = "",
@@ -297,7 +314,14 @@ const SoccerStatInput = ({
         className={
           isBad ? [ss.item, ss.bad_item].join(" ") : ss.item
         }>
-        <div className={ss.title}>{title}</div>
+        <div className={ss.title_box}>
+          <div className={ss.title}>{title}</div>
+          {subTitle && (
+            <div className={ss.sub_title}>
+              {`(${subTitle})`}
+            </div>
+          )}
+        </div>
         <div
           className={ss.value}>{`${value}${suffix}`}</div>
       </div>
@@ -306,6 +330,9 @@ const SoccerStatInput = ({
 
   const { passSuccessRate, passTries, ballTouches } =
     getPlayStat(state);
+  const attackingScore =
+    calculateAttackingMidfielderScore(state);
+  const overallRating = calculateOverallRating(state);
 
   return (
     <div className={ss.bg}>
@@ -323,6 +350,13 @@ const SoccerStatInput = ({
             value={title}
             onChange={handleTitleChange}
             placeholder="예) 대구ㅇㅇ초"
+          />
+          <input
+            className={ss.input_item}
+            type="number"
+            value={playtime}
+            onChange={handlePlaytimeChange}
+            placeholder="출전시간(단위:분)"
           />
           <select
             className={ss.input_item}
@@ -356,6 +390,16 @@ const SoccerStatInput = ({
           </div>
         </div>
         <div className={ss.value_group}>
+          <DashboardItem
+            title="평점"
+            value={overallRating}
+            subTitle="10점 만점"
+          />
+          <DashboardItem
+            title="공격력"
+            value={attackingScore}
+            subTitle="100점 만점"
+          />
           <DashboardItem
             title="볼 터치수"
             value={ballTouches}
@@ -487,6 +531,12 @@ const SoccerStatInput = ({
             stateKey="intercept"
             incrementType="INCREMENT_INTERCEPT"
             decrementType="DECREMENT_INTERCEPT"
+          />
+          <StatItem
+            title="Pressure"
+            stateKey="pressure"
+            incrementType="INCREMENT_PRESSURE"
+            decrementType="DECREMENT_PRESSURE"
           />
           <StatItem
             title="Successful Duels"

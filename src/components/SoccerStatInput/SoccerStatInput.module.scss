@@ -38,10 +38,25 @@
         align-items: center;
         justify-content: center;
 
-        .title {
+        .title_box {
           display: flex;
-          align-items: center;
-          height: 50px;
+          justify-content: center;
+          flex-direction: column;
+
+          .title {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 50px;
+          }
+
+          .sub_title {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 20px;
+            font-size: smaller;
+          }
         }
 
         .value {
@@ -157,13 +172,26 @@
           align-items: center;
           justify-content: center;
 
-          .title {
+          .title_box {
             display: flex;
-            white-space: nowrap;
-            align-items: center;
-            height: 20px;
-            width: 100%;
             justify-content: center;
+            flex-direction: column;
+            .title {
+              display: flex;
+              white-space: nowrap;
+              align-items: center;
+              height: 20px;
+              width: 100%;
+              justify-content: center;
+            }
+
+            .sub_title {
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              height: 10px;
+              font-size: smaller;
+          }
           }
 
           .value {

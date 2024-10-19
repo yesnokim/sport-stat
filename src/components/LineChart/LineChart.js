@@ -1,15 +1,15 @@
-import React, { useEffect, useState } from "react";
-import { Line } from "react-chartjs-2";
 import {
-  Chart as ChartJS,
   CategoryScale,
+  Chart as ChartJS,
+  Legend,
   LinearScale,
-  PointElement,
   LineElement,
+  PointElement,
   Title,
   Tooltip,
-  Legend,
 } from "chart.js";
+import React, { useEffect, useState } from "react";
+import { Line } from "react-chartjs-2";
 
 // ChartJS 필수 플러그인 등록
 ChartJS.register(
@@ -46,7 +46,7 @@ const LineChart = ({
 }) => {
   const [isMobile, setIsMobile] = useState(false);
 
-  // 화면 크기에 따라 isMobile 상태 설정
+  // 화면 크기에 따라 isMobile 상ㄱ태 설정
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth <= 768); // 768px 이하이면 모바일로 간주

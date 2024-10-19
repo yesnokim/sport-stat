@@ -5,22 +5,24 @@ import {
   query,
 } from "firebase/firestore";
 import { useEffect, useState } from "react";
+import BarChart from "../../components/BarChart/BarChart";
 import LineChart from "../../components/LineChart/LineChart";
 import MatchList from "../../components/MatchList/MatchList";
+import MixedChart from "../../components/MixedChart/MixedChart";
 import SignOutButton from "../../components/SignOutButton/SignOutButton";
 import { db } from "../../firebase";
 import { DB_COLLECTION_NAME } from "../../utils/constants";
-import ss from "./Main.module.scss";
 import {
   calculateAttackingMidfielderScore,
+  calculateOverallRating,
   getPlayStat,
   processData,
 } from "../../utils/utils";
-import MixedChart from "../../components/MixedChart/MixedChart";
+import ss from "./Main.module.scss";
 
 const Main = () => {
   const [matchData, setMatchData] = useState([]);
-  const [processedDate, setProcessedData] = useState([]);
+  const [processedData, setProcessedData] = useState([]);
 
   // Firestore에서 데이터를 불러오는 함수
   const fetchMatches = async () => {
@@ -59,10 +61,40 @@ const Main = () => {
         <div className={ss.charts}>
           <div className={ss.title}>통계 (최근 10경기)</div>
           <div className={ss.chart}>
-            {processedDate && (
-              <MixedChart
+            {processedData && (
+              <BarChart
                 title="종합평가"
-                data={processedDate}
+                data={processedData}
+                xAxisMobileFn={(row) => {
+                  return row.title;
+                }}
+                xAxisFn={(row) => {
+                  const timestamp = row.matchDate; // Firestore의 Timestamp 값
+                  const date = timestamp.toDate(); // Timestamp를 JavaScript Date 객체로 변환
+                  const month = (date.getMonth() + 1)
+                    .toString()
+                    .padStart(2, "0"); // 월 (MM) 형식
+                  const day = date
+                    .getDate()
+                    .toString()
+                    .padStart(2, "0"); // 일 (DD) 형식
+                  return `${month}/${day} ${row.title} ${row.matchPeriod}`;
+                }}
+                yAxisFns={[
+                  (row) => {
+                    const ovrRatings =
+                      calculateOverallRating(row);
+                    return ovrRatings;
+                  },
+                ]}
+                labels={["평점"]}
+              />
+            )}
+          </div>
+          <div className={ss.chart}>
+            {processedData && (
+              <MixedChart
+                data={processedData}
                 xAxisMobileFn={(row) => {
                   return row.title;
                 }}
@@ -122,7 +154,7 @@ const Main = () => {
           <div className={ss.chart}>
             <LineChart
               title="적극성"
-              data={processedDate}
+              data={processedData}
               xAxisMobileFn={(row) => {
                 return row.title;
               }}
