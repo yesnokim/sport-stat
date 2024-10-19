@@ -64,9 +64,11 @@ const Main = () => {
   const getMatchData = useCallback(() => {
     switch (selectedMatchType) {
       case MATCH_LIST_TYPES.GAME:
-        return processedData;
+        return Array.isArray(processedData)
+          ? [...processedData].reverse()
+          : [];
       case MATCH_LIST_TYPES.QUARTER:
-        return matchData;
+        return Array.isArray(matchData) ? matchData : [];
       default:
         return [];
     }
