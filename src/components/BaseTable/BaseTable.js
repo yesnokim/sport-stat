@@ -24,14 +24,45 @@ const BaseTable = ({ columns = [], data = [] }) => {
       },
     },
   });
+  // 페이지 수 및 현재 페이지를 가져옴
+  const pageCount = table.getPageCount();
+  const currentPage = table.getState().pagination.pageIndex;
 
-  // 페이지 번호 리스트 생성 함수
-  const pageNumbers = () => {
-    const pages = [];
-    for (let i = 0; i < table.getPageCount(); i++) {
-      pages.push(i);
+  // 페이지 번호를 최대 5개만 보여주도록 하는 함수
+  const renderPageNumbers = () => {
+    const maxPagesToShow = 5; // 최대 페이지 번호 버튼 수
+    const pageNumbers = [];
+
+    // 시작 페이지 번호 계산
+    let startPage = Math.max(
+      0,
+      Math.min(
+        currentPage - Math.floor(maxPagesToShow / 2),
+        pageCount - maxPagesToShow
+      )
+    );
+
+    // 끝 페이지 번호 계산
+    let endPage = Math.min(
+      startPage + maxPagesToShow,
+      pageCount
+    );
+
+    // 페이지 번호 배열 생성
+    for (let i = startPage; i < endPage; i++) {
+      pageNumbers.push(
+        <button
+          key={i}
+          onClick={() => table.setPageIndex(i)}
+          className={
+            i === currentPage ? ss.active_page : ""
+          }>
+          {i + 1}
+        </button>
+      );
     }
-    return pages;
+
+    return pageNumbers;
   };
 
   return (
@@ -86,48 +117,47 @@ const BaseTable = ({ columns = [], data = [] }) => {
       </div>
       {/* 페이징 컨트롤 */}
       <div className={ss.pagination_controls}>
+        {/* 이전 5페이지로 이동하는 버튼 */}
+        {currentPage > 4 && (
+          <button
+            onClick={() =>
+              table.setPageIndex(
+                Math.max(currentPage - 5, 0)
+              )
+            }>
+            {"<<"}
+          </button>
+        )}
         <button
           onClick={() => table.previousPage()}
           disabled={!table.getCanPreviousPage()}>
-          Previous
+          {"<"}
         </button>{" "}
-        <span>
-          Page{" "}
-          <strong>
-            {table.getState().pagination.pageIndex + 1} of{" "}
-            {table.getPageCount()}
-          </strong>
-        </span>
         {/* 페이지 번호 표시 */}
-        {pageNumbers().map((pageIndex) => (
-          <button
-            key={pageIndex}
-            onClick={() => table.setPageIndex(pageIndex)}
-            disabled={
-              pageIndex ===
-              table.getState().pagination.pageIndex
-            } // 현재 페이지는 비활성화
-            className={
-              pageIndex ===
-              table.getState().pagination.pageIndex
-                ? ss.active_page
-                : ""
-            }>
-            {pageIndex + 1}
-          </button>
-        ))}
+        {renderPageNumbers()}
         <button
           onClick={() => table.nextPage()}
           disabled={!table.getCanNextPage()}>
-          Next
-        </button>{" "}
+          {">"}
+        </button>
+        {/* 다음 5페이지로 이동하는 버튼 */}
+        {currentPage < pageCount - 5 && (
+          <button
+            onClick={() =>
+              table.setPageIndex(
+                Math.min(currentPage + 5, pageCount - 1)
+              )
+            }>
+            {">>"}
+          </button>
+        )}{" "}
         <select
           className={ss.page_size_selector}
           value={table.getState().pagination.pageSize}
           onChange={(e) => {
             table.setPageSize(Number(e.target.value));
           }}>
-          {[10, 20, 50].map((pageSize) => (
+          {[5, 10, 20, 50, 100].map((pageSize) => (
             <option
               key={pageSize}
               value={pageSize}>
