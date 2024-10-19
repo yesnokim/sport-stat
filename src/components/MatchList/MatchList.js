@@ -1,15 +1,19 @@
-import { FaYoutube } from "react-icons/fa";
+import _ from "lodash";
+import {
+  FaAngleDown,
+  FaAngleRight,
+  FaYoutube,
+} from "react-icons/fa";
 import { Link } from "react-router-dom";
 import {
   calculateOverallRating,
   getPlayStat,
 } from "../../utils/utils";
 import BaseTable from "../BaseTable/BaseTable";
-import ss from "./MatchList.module.scss";
 import RadarChart from "../RadarChart/RadarChart";
-import { FaAngleDown, FaAngleRight } from "react-icons/fa"; // 펼치기 아이콘
+import ss from "./MatchList.module.scss";
 
-const ColDef = [
+const COLUMN_DEF_BASE = [
   {
     id: "expander",
     header: () => null,
@@ -46,7 +50,11 @@ const ColDef = [
     },
   },
   { header: "상대팀", accessorKey: "title" },
-  { header: "쿼터", accessorKey: "matchPeriod" },
+  {
+    header: "쿼터",
+    accessorKey: "matchPeriod",
+    isQuarterOnly: true,
+  },
   {
     header: "평점",
     accessorFn: (row) => {
@@ -156,6 +164,7 @@ const ColDef = [
   },
   {
     header: "상세보기",
+    isQuarterOnly: true,
     cell: ({ row }) => (
       <div
         style={{
@@ -184,21 +193,27 @@ const ColDef = [
   },
 ];
 
-const MatchList = ({ data }) => {
+export const MATCH_COLUMN_TYPES = {
+  QUARTER: COLUMN_DEF_BASE,
+  GAME: _.filter(
+    COLUMN_DEF_BASE,
+    (colDef) => !colDef.isQuarterOnly
+  ),
+};
+
+const MatchList = ({
+  data,
+  colDef = MATCH_COLUMN_TYPES.QUARTER,
+}) => {
   return (
     <div className={ss.bg}>
       <BaseTable
-        columns={ColDef}
+        columns={colDef}
         data={data}
         getRowCanExpand={() => true}
         renderSubComponent={({ row }) => {
           return (
-            <div
-              style={{
-                width: "90vw",
-                display: "flex",
-                justifyContent: "center",
-              }}>
+            <div className={ss.sub_render_row}>
               <RadarChart
                 playerState={row.original}
                 playerName={row.original?.playerName}

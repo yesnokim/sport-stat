@@ -121,7 +121,7 @@ const BaseTable = ({
                   ))}
                 </tr>
                 {row.getIsExpanded() && (
-                  <tr>
+                  <tr className={ss.sub_table_row}>
                     {/* 2nd row is a custom 1 cell row */}
                     <td
                       colSpan={

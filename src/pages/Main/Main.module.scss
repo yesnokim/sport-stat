@@ -1,45 +1,56 @@
 .bg {
-    display: flex;
+  display: flex;
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+
+  .header {
+    position: absolute;
+    height: 20px;
+    top: 5px;
+    right: 5px;
+  }
+
+  .contents {
     width: 100%;
-    height: 100%;
-    justify-content: center;
-    align-items: center;
 
-    .header {
-        position: absolute;
-        height: 20px;
-        top: 5px;
-        right: 5px;
-    }
+    .match_list {
+      margin-top: 20px;
+      .title_box {
+        display: flex;
+        justify-content: space-between;
+        .title {
+          font-size: large;
+          font-weight: bold;
+        }
 
-    .contents {
+        .radio_buttons {
+          display: flex;
+          column-gap: 5px;
+          align-items: center;
+          font-size: normal;
+        }
+      }
+
+      .content {
         width: 100%;
-
-        .match_list {
-            margin-top: 20px;
-            .title {
-                font-size: large;
-                font-weight: bold;
-            }
-    
-            .content{
-                width: 100%;
-                margin: 5px 0 5px 0;
-                overflow: auto;
-            }
-        }
-
-        .charts {
-            margin: 5px 0 10px 0;
-            .title {
-                font-size: large;
-                font-weight: bold;
-            }
-    
-            .chart {
-                width: 100%;
-                height: 400px;
-            }
-        }
+        margin: 5px 0 5px 0;
+        overflow: auto;
+      }
     }
+
+    .charts {
+      margin: 5px 0 10px 0;
+      .title {
+        font-size: large;
+        font-weight: bold;
+      }
+
+      .chart {
+        width: 100%;
+        height: 400px;
+      }
+    }
+  }
 }

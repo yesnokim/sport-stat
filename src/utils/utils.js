@@ -86,6 +86,9 @@ export const processData = (
           .reverse()
           .join(","),
 
+        playTime: sumBy(group, "playTime"),
+        videoUrl: group.map((item) => item.videoUrl),
+
         // 나머지 값들은 합산 처리
         forwardPass: sumBy(group, "forwardPass"),
         sidePass: sumBy(group, "sidePass"),
