@@ -22,8 +22,8 @@ ChartJS.register(
   Legend
 );
 
-const MAX_BALL_TOUCHES = 33;
-const MAX_KEY_PASSES = 7;
+const MAX_BALL_TOUCHES = 40;
+const MAX_KEY_PASSES = 10;
 
 const RadarChart = ({
   playerState,
