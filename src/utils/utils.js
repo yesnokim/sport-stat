@@ -35,7 +35,7 @@ export const getPlayStat = (state) => {
   const passSuccessRate = (
     (passSuccess * 100) /
     passTries
-  ).toFixed(2);
+  ).toFixed(0);
   const ballTouches =
     passTries +
     state["shot"] +
