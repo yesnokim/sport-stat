@@ -207,8 +207,7 @@ const Main = () => {
                   const { attackPoints } = getPlayStat(row);
                   return attackPoints;
                 },
-                (row) =>
-                  row.successfulDuel + row.failedDuel,
+                (row) => row.successfulDuel,
                 (row) => {
                   return row.intercept;
                 },
@@ -216,7 +215,7 @@ const Main = () => {
               ]}
               labels={[
                 "공격포인트",
-                "경합",
+                "경합성공",
                 "인터셉트",
                 "슛",
               ]}
