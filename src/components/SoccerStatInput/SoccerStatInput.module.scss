@@ -48,7 +48,7 @@
     .value_group {
       display: grid;
       grid-template-columns: repeat(
-        5,
+        4,
         1fr
       ); // 5개의 열을 동일한 너비로 설정
       width: 100%;
@@ -100,9 +100,13 @@
   }
 
   .controller {
-    display: flex;
-    gap: 20px;
-    justify-content: space-evenly;
+    display: grid;
+    grid-template-columns: repeat(
+      4,
+      1fr
+    ); // 5개의 열을 동일한 너비로 설정
+    width: 100%;
+    gap: 10px;
 
     .stat_group {
       display: flex;
@@ -128,6 +132,31 @@
         .stat_btn {
           width: 30px;
           height: 30px;
+        }
+      }
+
+      .input_group {
+        display: flex;
+        gap: 5px;
+
+        input {
+          width: 100px;
+          height: 20px;
+        }
+      }
+
+      .goals_list {
+        margin: 10px;
+        row-gap: 10px;
+        display: flex;
+        flex-direction: column;
+
+        .goal_item {
+          margin-left: 20px;
+          display: flex;
+          column-gap: 10px;
+          width: 200px;
+          justify-content: flex-end;
         }
       }
     }

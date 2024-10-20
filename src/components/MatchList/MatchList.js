@@ -96,13 +96,13 @@ const COLUMN_DEF_BASE = [
       let color = "";
 
       // 패스 성공률에 따른 색상 및 레이블 설정
-      if (value >= 40) {
+      if (value >= 45) {
         color = "#006400"; // Dark Green
-      } else if (value >= 30) {
+      } else if (value >= 35) {
         color = "#00008B"; // Navy
-      } else if (value >= 20) {
+      } else if (value >= 25) {
         color = "#FF8C00"; // Dark Orange
-      } else if (value >= 10) {
+      } else if (value >= 15) {
         color = "#8B4513"; // Brown
       } else {
         color = "red"; // Dark Red
