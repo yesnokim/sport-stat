@@ -329,7 +329,7 @@ const SoccerStatInput = ({
     );
     dispatch({
       type: "UPDATE_STATE",
-      payload: { goalsScored: updatedGoals },
+      payload: { ...state, goalsScored: updatedGoals },
     });
     setEditIndex(null); // 수정 완료 후 수정 모드 종료
     setEditedScorer(""); // 수정 필드 초기화
