@@ -1,4 +1,9 @@
-import { doc, setDoc, Timestamp } from "firebase/firestore";
+import {
+  deleteDoc,
+  doc,
+  setDoc,
+  Timestamp,
+} from "firebase/firestore";
 import { useEffect, useReducer, useState } from "react";
 import { FaYoutube } from "react-icons/fa";
 import { db } from "../../firebase";
@@ -29,6 +34,8 @@ const initialState = {
   turnover: 0,
   intercept: 0,
   pressure: 0,
+  goalsScored: [], // 각 득점 정보를 저장하는 리스트 [{ scorer: "선수1", assister: "선수2" }]
+  goalsConceded: 0, // 실점 수
 };
 
 // reducer 함수 정의
@@ -175,6 +182,38 @@ function reducer(state, action) {
         shot: state.shot - 1,
       };
 
+    case "ADD_GOAL":
+      return {
+        ...state,
+        goalsScored: [
+          ...state.goalsScored,
+          {
+            scorer: action.payload.scorer,
+            assister: action.payload.assister,
+          },
+        ],
+      };
+
+    case "REMOVE_GOAL":
+      return {
+        ...state,
+        goalsScored: state.goalsScored.filter(
+          (_, index) => index !== action.payload.index
+        ),
+      };
+
+    // 실점 추가
+    case "INCREMENT_GOALS_CONCEDED":
+      return {
+        ...state,
+        goalsConceded: state.goalsConceded + 1,
+      };
+    case "DECREMENT_GOALS_CONCEDED":
+      return {
+        ...state,
+        goalsConceded: state.goalsConceded - 1,
+      };
+
     default:
       return state;
   }
@@ -188,6 +227,7 @@ const SoccerStatInput = ({
   initPlaytime = "",
   initMatchPeriod = "전반",
   initVideoUrl = "",
+  matchId,
 }) => {
   const [state, dispatch] = useReducer(
     reducer,
@@ -199,6 +239,9 @@ const SoccerStatInput = ({
   const [matchPeriod, setMatchPeriod] =
     useState(initMatchPeriod); // 초기값을 설정
   const [videoUrl, setVideoUrl] = useState(initVideoUrl); // 초기값을 설정
+  const [scorer, setScorer] = useState(""); // 득점 선수
+  const [assister, setAssister] = useState(""); // 도움 선수
+  const [showGoalInput, setShowGoalInput] = useState(false); // 득점 입력창 표시 여부
 
   const [isMobile, setIsMobile] = useState(false);
 
@@ -245,6 +288,24 @@ const SoccerStatInput = ({
     setVideoUrl(e.target.value);
   };
 
+  const handleAddGoal = () => {
+    if (scorer && assister) {
+      dispatch({
+        type: "ADD_GOAL",
+        payload: { scorer, assister },
+      });
+      setScorer(""); // 입력 후 초기화
+      setAssister(""); // 입력 후 초기화
+      setShowGoalInput(false); // 입력창 닫기
+    } else {
+      alert("득점 선수와 도움 선수를 입력하세요.");
+    }
+  };
+
+  const handleRemoveGoal = (index) => {
+    dispatch({ type: "REMOVE_GOAL", payload: { index } });
+  };
+
   const saveMatchResult = async () => {
     const isConfirmed =
       window.confirm("정말 저장하시겠습니까?");
@@ -273,12 +334,32 @@ const SoccerStatInput = ({
           matchData,
           { merge: true }
         );
-        alert("Data saved successfully!");
+        alert("성공적으로 저장되었습니다.");
       } catch (error) {
         console.error("Error saving document: ", error);
       }
     } else {
       alert("저장 작업이 취소되었습니다.");
+    }
+  };
+
+  // 문서 삭제 함수
+  const deleteMatch = async () => {
+    try {
+      await deleteDoc(doc(db, "matches", matchId));
+      console.log("성공적으로 삭제되었습니다.");
+    } catch (error) {
+      console.error("삭제 실패: ", error);
+    }
+  };
+
+  const handleDelete = () => {
+    // 사용자에게 삭제 여부를 확인
+    const confirmDelete = window.confirm(
+      `정말로 이 항목을 삭제하시겠습니까? \n${matchId}`
+    );
+    if (confirmDelete) {
+      deleteMatch();
     }
   };
 
@@ -387,13 +468,22 @@ const SoccerStatInput = ({
               placeholder="https://www.youtube.com/watch?..."
             />
             {!isMobile && (
-              <button
-                className={ss.save_btn}
-                onClick={() => {
-                  saveMatchResult();
-                }}>
-                SAVE
-              </button>
+              <>
+                <button
+                  className={ss.btn}
+                  onClick={() => {
+                    saveMatchResult();
+                  }}>
+                  SAVE
+                </button>
+                {matchId && (
+                  <button
+                    className={ss.btn}
+                    onClick={() => handleDelete()}>
+                    DELETE
+                  </button>
+                )}
+              </>
             )}
           </div>
         </div>
@@ -590,6 +680,83 @@ const SoccerStatInput = ({
             stateKey="turnover"
             incrementType="INCREMENT_TURNOVER"
             decrementType="DECREMENT_TURNOVER"
+          />
+        </div>
+        <div className={ss.stat_group}>
+          <h3>득점/실점 관리</h3>
+
+          {/* 득점 수 */}
+          <div className={ss.stat_item}>
+            <div className={ss.stat_title}>득점</div>
+            <button
+              className={ss.stat_btn}
+              onClick={() =>
+                handleRemoveGoal(
+                  state.goalsScored.length - 1
+                )
+              }
+              disabled={state.goalsScored.length === 0}>
+              -
+            </button>
+            <div className={ss.stat_value}>
+              {state.goalsScored.length}
+            </div>
+            <button
+              className={ss.stat_btn}
+              onClick={() => setShowGoalInput(true)}>
+              +
+            </button>
+          </div>
+
+          {/* 득점 입력 */}
+          {showGoalInput && (
+            <div className={ss.input_group}>
+              <input
+                type="text"
+                value={scorer}
+                onChange={(e) => setScorer(e.target.value)}
+                placeholder="득점 선수 이름"
+              />
+              <input
+                type="text"
+                value={assister}
+                onChange={(e) =>
+                  setAssister(e.target.value)
+                }
+                placeholder="도움 선수 이름"
+              />
+              <button
+                className={ss.stat_btn}
+                onClick={handleAddGoal}>
+                ADD
+              </button>
+            </div>
+          )}
+
+          {/* 득점 리스트 */}
+          {state.goalsScored?.length > 0 && (
+            <div className={ss.goals_list}>
+              {state.goalsScored.map((goal, index) => (
+                <div
+                  key={index}
+                  className={ss.goal_item}>
+                  <span>{`득점: ${goal.scorer} / 도움: ${goal.assister}`}</span>
+                  <button
+                    className={ss.stat_btn}
+                    onClick={() => handleRemoveGoal(index)}>
+                    -
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* 실점 관리 */}
+          <StatItem
+            title="실점"
+            stateKey="goalsConceded"
+            incrementType="INCREMENT_GOALS_CONCEDED"
+            decrementType="DECREMENT_GOALS_CONCEDED"
           />
         </div>
       </div>

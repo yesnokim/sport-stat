@@ -40,6 +40,7 @@ const SoccerStat = () => {
   return (
     <div className="bg">
       <SoccerStatInput
+        matchId={matchId}
         initTitle={matchData?.title}
         initMatchDate={formatDateDatetimeLocal(
           matchData?.matchDate.toDate()
