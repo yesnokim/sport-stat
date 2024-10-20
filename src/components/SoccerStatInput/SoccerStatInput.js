@@ -242,6 +242,9 @@ const SoccerStatInput = ({
   const [scorer, setScorer] = useState(""); // 득점 선수
   const [assister, setAssister] = useState(""); // 도움 선수
   const [showGoalInput, setShowGoalInput] = useState(false); // 득점 입력창 표시 여부
+  const [editIndex, setEditIndex] = useState(null); // 수정 중인 득점 항목의 인덱스
+  const [editedScorer, setEditedScorer] = useState(""); // 수정 중인 득점 선수 이름
+  const [editedAssister, setEditedAssister] = useState(""); // 수정 중인 도움 선수 이름
 
   const [isMobile, setIsMobile] = useState(false);
 
@@ -304,6 +307,33 @@ const SoccerStatInput = ({
 
   const handleRemoveGoal = (index) => {
     dispatch({ type: "REMOVE_GOAL", payload: { index } });
+  };
+
+  // 득점 수정 모드를 저장하는 함수
+  const handleEditGoal = (index) => {
+    setEditIndex(index); // 수정할 득점 항목의 인덱스 설정
+    setEditedScorer(state.goalsScored[index].scorer); // 기존 득점자 이름을 초기화
+    setEditedAssister(state.goalsScored[index].assister); // 기존 도움자 이름을 초기화
+  };
+
+  // 득점 수정 완료 처리 함수
+  const handleSaveEditedGoal = () => {
+    const updatedGoals = state.goalsScored.map(
+      (goal, index) =>
+        index === editIndex
+          ? {
+              scorer: editedScorer,
+              assister: editedAssister,
+            }
+          : goal
+    );
+    dispatch({
+      type: "UPDATE_STATE",
+      payload: { goalsScored: updatedGoals },
+    });
+    setEditIndex(null); // 수정 완료 후 수정 모드 종료
+    setEditedScorer(""); // 수정 필드 초기화
+    setEditedAssister(""); // 수정 필드 초기화
   };
 
   const saveMatchResult = async () => {
@@ -740,12 +770,54 @@ const SoccerStatInput = ({
                 <div
                   key={index}
                   className={ss.goal_item}>
-                  <span>{`득점: ${goal.scorer} / 도움: ${goal.assister}`}</span>
-                  <button
-                    className={ss.stat_btn}
-                    onClick={() => handleRemoveGoal(index)}>
-                    -
-                  </button>
+                  {editIndex === index ? (
+                    <div className={ss.input_group}>
+                      <input
+                        type="text"
+                        value={editedScorer}
+                        onChange={(e) =>
+                          setEditedScorer(e.target.value)
+                        }
+                        placeholder="득점 선수 이름 수정"
+                      />
+                      <input
+                        type="text"
+                        value={editedAssister}
+                        onChange={(e) =>
+                          setEditedAssister(e.target.value)
+                        }
+                        placeholder="도움 선수 이름 수정"
+                      />
+                      <button
+                        className={ss.stat_btn}
+                        onClick={handleSaveEditedGoal}>
+                        SAVE
+                      </button>
+                      <button
+                        className={ss.stat_btn}
+                        onClick={() => setEditIndex(null)}>
+                        CANCEL
+                      </button>
+                    </div>
+                  ) : (
+                    <>
+                      <span>{`G: ${goal.scorer} / A: ${goal.assister}`}</span>
+                      <button
+                        className={ss.btn}
+                        onClick={() =>
+                          handleRemoveGoal(index)
+                        }>
+                        -
+                      </button>
+                      <button
+                        className={ss.btn}
+                        onClick={() =>
+                          handleEditGoal(index)
+                        }>
+                        EDIT
+                      </button>
+                    </>
+                  )}
                 </div>
               ))}
             </div>
