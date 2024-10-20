@@ -289,16 +289,16 @@ const SoccerStatInput = ({
   };
 
   const handleAddGoal = () => {
-    if (scorer && assister) {
+    if (scorer) {
       dispatch({
         type: "ADD_GOAL",
-        payload: { scorer, assister },
+        payload: { scorer, assister: assister || "" },
       });
       setScorer(""); // 입력 후 초기화
       setAssister(""); // 입력 후 초기화
       setShowGoalInput(false); // 입력창 닫기
     } else {
-      alert("득점 선수와 도움 선수를 입력하세요.");
+      alert("득점 선수를 입력하세요.");
     }
   };
 

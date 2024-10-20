@@ -1,5 +1,5 @@
 import { format } from "date-fns"; // 날짜 처리 용이성을 위해 date-fns 사용
-import { groupBy, orderBy, sumBy } from "lodash";
+import { flatMap, groupBy, orderBy, sumBy } from "lodash";
 
 // Timestamp를 'YYYY-MM-DD' 형식으로 변환하는 함수
 export const formatDate = (timestamp) => {
@@ -106,6 +106,11 @@ export const processData = (
         turnover: sumBy(group, "turnover"),
         intercept: sumBy(group, "intercept"),
         pressure: sumBy(group, "pressure"),
+        goalsScored: flatMap(
+          [...group].reverse(),
+          (item) => item.goalsScored || []
+        ).filter(Boolean), // undefined 제외, 각 항목의 득점 배열을 하나로 병합
+        goalsConceded: sumBy(group, "goalsConceded"), // 실점은 숫자이므로 합산
       };
     }
   );
