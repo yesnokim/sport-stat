@@ -6,11 +6,14 @@ import {
 } from "firebase/firestore";
 import { useCallback, useEffect, useState } from "react";
 import BarChart from "../../components/BarChart/BarChart";
+import GoalScoreInfo from "../../components/GoalScoreInfo/GoalScoreInfo";
 import LineChart from "../../components/LineChart/LineChart";
 import MatchList, {
+  COLUMN_DEFINITION_MATCH_RESULT,
   MATCH_COLUMN_TYPES,
 } from "../../components/MatchList/MatchList";
 import MixedChart from "../../components/MixedChart/MixedChart";
+import RadarChart from "../../components/RadarChart/RadarChart";
 import SignOutButton from "../../components/SignOutButton/SignOutButton";
 import { db } from "../../firebase";
 import { DB_COLLECTION_NAME } from "../../utils/constants";
@@ -91,7 +94,9 @@ const Main = () => {
       </div>
       <div className={ss.contents}>
         <div className={ss.charts}>
-          <div className={ss.title}>통계 (최근 10경기)</div>
+          <div className={ss.title}>
+            종합평가 (최근 10경기)
+          </div>
           <div className={ss.chart}>
             {processedData && (
               <BarChart
@@ -224,9 +229,7 @@ const Main = () => {
         </div>
         <div className={ss.match_list}>
           <div className={ss.title_box}>
-            <div className={ss.title}>
-              경기목록 및 통계 (상세)
-            </div>
+            <div className={ss.title}>경기별 상세 통계</div>
             <div className={ss.radio_buttons}>
               <label>
                 <input
@@ -267,7 +270,45 @@ const Main = () => {
             <MatchList
               data={getMatchData()}
               colDef={getMatchColumnDef()}
+              renderSubComponent={({ row }) => {
+                return (
+                  <div className={ss.sub_render_row}>
+                    <RadarChart
+                      playerState={row.original}
+                      playerName={row.original?.playerName}
+                    />
+                  </div>
+                );
+              }}
             />
+          </div>
+          <div className={ss.match_list}>
+            <div className={ss.title_box}>
+              <div className={ss.title}>
+                경기결과 및 공격포인트
+              </div>
+            </div>
+            <div className={ss.content}>
+              <MatchList
+                data={
+                  Array.isArray(processedData)
+                    ? [...processedData].reverse()
+                    : []
+                }
+                colDef={COLUMN_DEFINITION_MATCH_RESULT}
+                renderSubComponent={({ row }) => {
+                  return (
+                    <div className={ss.sub_render_row}>
+                      <GoalScoreInfo
+                        goalsScored={
+                          row?.original?.goalsScored
+                        }
+                      />
+                    </div>
+                  );
+                }}
+              />
+            </div>
           </div>
         </div>
       </div>

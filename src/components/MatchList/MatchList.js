@@ -10,8 +10,92 @@ import {
   getPlayStat,
 } from "../../utils/utils";
 import BaseTable from "../BaseTable/BaseTable";
-import RadarChart from "../RadarChart/RadarChart";
 import ss from "./MatchList.module.scss";
+
+export const COLUMN_DEFINITION_MATCH_RESULT = [
+  {
+    id: "expander",
+    header: () => null,
+    cell: ({ row }) => {
+      return row.getCanExpand() ? (
+        <div
+          {...{
+            onClick: row.getToggleExpandedHandler(),
+            style: { cursor: "pointer" },
+          }}>
+          {row.getIsExpanded() ? (
+            <FaAngleDown className={ss.expand_icon} />
+          ) : (
+            <FaAngleRight className={ss.expand_icon} />
+          )}
+        </div>
+      ) : null;
+    },
+  },
+  {
+    header: "날짜",
+    cell: ({ row }) => {
+      const timestamp = row.original.matchDate; // Firestore Timestamp
+      const date = timestamp.toDate(); // JavaScript Date 객체로 변환
+      const formattedDate = `${date.getFullYear()}-${(
+        date.getMonth() + 1
+      )
+        .toString()
+        .padStart(2, "0")}-${date
+        .getDate()
+        .toString()
+        .padStart(2, "0")}`;
+      return formattedDate; // YYYY-MM-DD 형식으로 날짜 표시
+    },
+  },
+  { header: "상대팀", accessorKey: "title" },
+  {
+    header: "결과",
+    accessorFn: (row) => {
+      console.log("row.goalsScored", row.goalsScored);
+      const scores = row.goalsScored?.length;
+      const conceded = row.goalsConceded;
+
+      if (scores > conceded) return "승";
+      else if (scores === conceded) return "무";
+      else if (scores < conceded) return "패";
+      else return "-";
+    },
+    cell: ({ getValue }) => {
+      const value = getValue();
+      let color = "";
+
+      switch (value) {
+        case "승":
+          color = "#00008B";
+          break;
+        case "패":
+          color = "#FF0000";
+          break;
+        default:
+          color = "black";
+          break;
+      }
+
+      return (
+        <span style={{ color, fontWeight: "bold" }}>
+          {value}
+        </span>
+      );
+    },
+  },
+  {
+    header: "득점",
+    accessorFn: (row) => {
+      console.log("row.goalsScored", row.goalsScored);
+      return row.goalsScored?.length;
+    },
+  },
+  {
+    header: "실점",
+    accessorKey: "goalsConceded",
+  },
+];
 
 const COLUMN_DEF_BASE = [
   {
@@ -204,6 +288,7 @@ export const MATCH_COLUMN_TYPES = {
 const MatchList = ({
   data,
   colDef = MATCH_COLUMN_TYPES.QUARTER,
+  renderSubComponent,
 }) => {
   return (
     <div className={ss.bg}>
@@ -211,16 +296,7 @@ const MatchList = ({
         columns={colDef}
         data={data}
         getRowCanExpand={() => true}
-        renderSubComponent={({ row }) => {
-          return (
-            <div className={ss.sub_render_row}>
-              <RadarChart
-                playerState={row.original}
-                playerName={row.original?.playerName}
-              />
-            </div>
-          );
-        }}
+        renderSubComponent={renderSubComponent}
       />
     </div>
   );
