@@ -1,4 +1,9 @@
-import { doc, setDoc, Timestamp } from "firebase/firestore";
+import {
+  deleteDoc,
+  doc,
+  setDoc,
+  Timestamp,
+} from "firebase/firestore";
 import { useEffect, useReducer, useState } from "react";
 import { FaYoutube } from "react-icons/fa";
 import { db } from "../../firebase";
@@ -188,6 +193,7 @@ const SoccerStatInput = ({
   initPlaytime = "",
   initMatchPeriod = "전반",
   initVideoUrl = "",
+  matchId,
 }) => {
   const [state, dispatch] = useReducer(
     reducer,
@@ -273,12 +279,32 @@ const SoccerStatInput = ({
           matchData,
           { merge: true }
         );
-        alert("Data saved successfully!");
+        alert("성공적으로 저장되었습니다.");
       } catch (error) {
         console.error("Error saving document: ", error);
       }
     } else {
       alert("저장 작업이 취소되었습니다.");
+    }
+  };
+
+  // 문서 삭제 함수
+  const deleteMatch = async () => {
+    try {
+      await deleteDoc(doc(db, "matches", matchId));
+      console.log("성공적으로 삭제되었습니다.");
+    } catch (error) {
+      console.error("삭제 실패: ", error);
+    }
+  };
+
+  const handleDelete = () => {
+    // 사용자에게 삭제 여부를 확인
+    const confirmDelete = window.confirm(
+      `정말로 이 항목을 삭제하시겠습니까? \n${matchId}`
+    );
+    if (confirmDelete) {
+      deleteMatch();
     }
   };
 
@@ -387,13 +413,22 @@ const SoccerStatInput = ({
               placeholder="https://www.youtube.com/watch?..."
             />
             {!isMobile && (
-              <button
-                className={ss.save_btn}
-                onClick={() => {
-                  saveMatchResult();
-                }}>
-                SAVE
-              </button>
+              <>
+                <button
+                  className={ss.btn}
+                  onClick={() => {
+                    saveMatchResult();
+                  }}>
+                  SAVE
+                </button>
+                {matchId && (
+                  <button
+                    className={ss.btn}
+                    onClick={() => handleDelete()}>
+                    DELETE
+                  </button>
+                )}
+              </>
             )}
           </div>
         </div>
