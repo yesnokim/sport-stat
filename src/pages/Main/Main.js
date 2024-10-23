@@ -28,6 +28,8 @@ import {
 } from "../../utils/utils";
 import ss from "./Main.module.scss";
 
+const LOCAL_STORAGE_KEY_MATCH_LIST_TYPE =
+  "main-local-match-list-type";
 const MATCH_LIST_TYPES = {
   QUARTER: "quarter",
   GAME: "game",
@@ -39,7 +41,18 @@ const Main = () => {
   const [matchData, setMatchData] = useState([]);
   const [processedData, setProcessedData] = useState([]);
   const [selectedMatchType, setSelectedMatchListType] =
-    useState(MATCH_LIST_TYPES.QUARTER);
+    useState(
+      localStorage.getItem(
+        LOCAL_STORAGE_KEY_MATCH_LIST_TYPE
+      ) || MATCH_LIST_TYPES.QUARTER
+    );
+
+  useEffect(() => {
+    localStorage.setItem(
+      LOCAL_STORAGE_KEY_MATCH_LIST_TYPE,
+      selectedMatchType
+    );
+  }, [selectedMatchType]);
 
   // Firestore에서 데이터를 불러오는 함수
   const fetchMatches = async () => {
