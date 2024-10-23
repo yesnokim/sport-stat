@@ -125,6 +125,31 @@ export const processData = (
   return sortedData.slice(0, gamesToShow);
 };
 
+export const getTotalPasses = (data) => {
+  const forwardPassTotal = sumBy(data, "forwardPass");
+  const sidePassTotal = sumBy(data, "sidePass");
+  const backPassTotal = sumBy(data, "backPass");
+  const failedPassTotal = sumBy(data, "failedPass");
+  const totalPasses =
+    forwardPassTotal +
+    sidePassTotal +
+    backPassTotal +
+    failedPassTotal;
+  const passSuccessRate =
+    (
+      (totalPasses - failedPassTotal) /
+      totalPasses
+    )?.toFixed(1) * 100;
+
+  return {
+    forwardPass: forwardPassTotal,
+    sidePass: sidePassTotal,
+    backPass: backPassTotal,
+    failedPass: failedPassTotal,
+    passSuccessRate,
+  };
+};
+
 export const calculateAttackingMidfielderScore = (
   playerStats
 ) => {

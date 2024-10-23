@@ -79,7 +79,6 @@ const DoughnutChart = ({
     labels: labels,
     datasets: [
       {
-        label: title || "Doughnut Chart",
         data: dataValues,
         backgroundColor: chartColors,
       },
