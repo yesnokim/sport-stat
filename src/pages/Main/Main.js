@@ -4,8 +4,10 @@ import {
   orderBy,
   query,
 } from "firebase/firestore";
+import _ from "lodash";
 import { useCallback, useEffect, useState } from "react";
 import BarChart from "../../components/BarChart/BarChart";
+import DoughnutChart from "../../components/DoughnutChart/DoughnutChart";
 import GoalScoreInfo from "../../components/GoalScoreInfo/GoalScoreInfo";
 import LineChart from "../../components/LineChart/LineChart";
 import MatchList, {
@@ -21,6 +23,7 @@ import {
   calculateAttackingMidfielderScore,
   calculateOverallRating,
   getPlayStat,
+  getTotalPasses,
   processData,
 } from "../../utils/utils";
 import ss from "./Main.module.scss";
@@ -29,6 +32,8 @@ const MATCH_LIST_TYPES = {
   QUARTER: "quarter",
   GAME: "game",
 };
+
+const GAME_TO_SHOW = 10;
 
 const Main = () => {
   const [matchData, setMatchData] = useState([]);
@@ -187,6 +192,29 @@ const Main = () => {
                 ]}
               />
             )}
+          </div>
+          <div className={ss.chart}>
+            <DoughnutChart
+              labels={[
+                "전진 패스",
+                "사이드 패스",
+                "백 패스",
+                "패스 실패",
+              ]}
+              dataValues={_.values(
+                _.pick(getTotalPasses(processedData), [
+                  "forwardPass",
+                  "sidePass",
+                  "backPass",
+                  "failedPass",
+                ])
+              )}
+              centerTitle={`${GAME_TO_SHOW}경기 패스성공률`}
+              centerValue={`${
+                getTotalPasses(processedData)
+                  ?.passSuccessRate
+              }%`}
+            />
           </div>
           <div className={ss.chart}>
             <LineChart
