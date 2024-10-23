@@ -15,6 +15,8 @@ import {
 } from "../../utils/utils";
 import RadarChart from "../RadarChart/RadarChart";
 import ss from "./SoccerStatInput.module.scss";
+import DoughnutChart from "../DoughnutChart/DoughnutChart";
+import _ from "lodash";
 
 // 초기 상태 정의
 const initialState = {
@@ -541,6 +543,25 @@ const SoccerStatInput = ({
             <RadarChart
               playerState={state}
               playerName={playerName}
+            />
+          </div>
+          <div className={ss.chart_item}>
+            <DoughnutChart
+              labels={[
+                "전진 패스",
+                "사이드 패스",
+                "백 패스",
+              ]}
+              dataValues={_.values(
+                _.pick(state, [
+                  "forwardPass",
+                  "sidePass",
+                  "backPass",
+                ])
+              )}
+              title="패스 구성"
+              centerTitle="패스 성공률"
+              centerValue={`${passSuccessRate}%`}
             />
           </div>
         </div>
