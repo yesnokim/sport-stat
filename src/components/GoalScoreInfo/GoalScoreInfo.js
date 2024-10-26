@@ -13,8 +13,8 @@ const GoalScoreInfo = ({ goalsScored }) => {
       <thead>
         <tr>
           <th>순번</th>
-          <th>득점자</th>
-          <th>도움자</th>
+          <th>득점</th>
+          <th>도움</th>
         </tr>
       </thead>
       <tbody>
