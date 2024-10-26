@@ -9,6 +9,7 @@ import { useCallback, useEffect, useState } from "react";
 import BarChart from "../../components/BarChart/BarChart";
 import DoughnutChart from "../../components/DoughnutChart/DoughnutChart";
 import GoalScoreInfo from "../../components/GoalScoreInfo/GoalScoreInfo";
+import LineChart from "../../components/LineChart/LineChart";
 import MatchList, {
   COLUMN_DEFINITION_MATCH_RESULT,
   COLUMN_GOALSCORED_GOAL_RESULT,
@@ -149,7 +150,6 @@ const Main = () => {
           <div className={ss.chart}>
             {processedData && (
               <MixedChart
-                title="주요활동"
                 data={processedData?.slice(-10)}
                 xAxisMobileFn={(row) => {
                   return row.title;
@@ -234,9 +234,8 @@ const Main = () => {
             />
           </div>
           <div className={ss.chart}>
-            <BarChart
-              title="적극성과 집중력"
-              stacked={true}
+            <LineChart
+              title="적극성"
               data={processedData?.slice(-10)}
               xAxisMobileFn={(row) => {
                 return row.title;
