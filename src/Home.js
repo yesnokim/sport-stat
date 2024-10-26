@@ -67,7 +67,8 @@ const Home = () => {
               Home
             </div>
           )}
-          {isMobile ? null : (
+          {isMobile ||
+          location.pathname === "/soccer-stat" ? null : (
             <div
               className={ss.menu_item}
               onClick={() => navigate("/soccer-stat")}>
