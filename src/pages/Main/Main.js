@@ -120,6 +120,7 @@ const Main = () => {
           <div className={ss.chart}>
             {processedData && (
               <BarChart
+                title="종합평가"
                 data={processedData?.slice(-10)}
                 xAxisMobileFn={(row) => {
                   return row.title;
