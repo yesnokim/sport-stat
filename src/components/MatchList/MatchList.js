@@ -12,6 +12,13 @@ import {
 import BaseTable from "../BaseTable/BaseTable";
 import ss from "./MatchList.module.scss";
 
+export const COLUMN_GOALSCORED_GOAL_RESULT = [
+  { header: "이름", accessorKey: "name" },
+  { header: "득점", accessorKey: "goals" },
+  { header: "도움", accessorKey: "assists" },
+  { header: "공격포인트", accessorKey: "attackPoints" },
+];
+
 export const COLUMN_DEFINITION_MATCH_RESULT = [
   {
     id: "expander",

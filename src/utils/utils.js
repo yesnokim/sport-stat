@@ -1,5 +1,10 @@
 import { format } from "date-fns"; // 날짜 처리 용이성을 위해 date-fns 사용
-import { flatMap, groupBy, orderBy, sumBy } from "lodash";
+import _, {
+  flatMap,
+  groupBy,
+  orderBy,
+  sumBy,
+} from "lodash";
 
 // Timestamp를 'YYYY-MM-DD' 형식으로 변환하는 함수
 export const formatDate = (timestamp) => {
@@ -299,4 +304,46 @@ export const calculateOverallRating = (playerStats) => {
   return attackingScore > 100
     ? 10
     : (attackingScore / 10).toFixed(1);
+};
+
+// 전체 경기 데이터에서 득점 및 도움 순위 계산 함수
+export const getScoringAssistRanking = (games) => {
+  const playerStats = {};
+
+  // 각 경기의 득점/도움 데이터를 순회하며 합산
+  games.forEach((game) => {
+    game.goalsScored.forEach((goal) => {
+      const { scorer, assister } = goal;
+
+      // 득점자 합산
+      if (scorer) {
+        if (!playerStats[scorer]) {
+          playerStats[scorer] = { goals: 0, assists: 0 };
+        }
+        playerStats[scorer].goals += 1;
+      }
+
+      // 도움자 합산
+      if (assister) {
+        if (!playerStats[assister]) {
+          playerStats[assister] = { goals: 0, assists: 0 };
+        }
+        playerStats[assister].assists += 1;
+      }
+    });
+  });
+
+  // 득점 순위와 도움 순위를 각각 구하고 정렬
+  const goalRanking = _.orderBy(
+    Object.entries(playerStats).map(([name, stats]) => ({
+      name,
+      attackPoints: stats.goals + stats.assists,
+      goals: stats.goals,
+      assists: stats.assists,
+    })),
+    ["attackPoints", "assists"],
+    ["desc", "desc"]
+  );
+
+  return goalRanking;
 };

@@ -12,6 +12,7 @@ import GoalScoreInfo from "../../components/GoalScoreInfo/GoalScoreInfo";
 import LineChart from "../../components/LineChart/LineChart";
 import MatchList, {
   COLUMN_DEFINITION_MATCH_RESULT,
+  COLUMN_GOALSCORED_GOAL_RESULT,
   MATCH_COLUMN_TYPES,
 } from "../../components/MatchList/MatchList";
 import MixedChart from "../../components/MixedChart/MixedChart";
@@ -23,6 +24,7 @@ import {
   calculateAttackingMidfielderScore,
   calculateOverallRating,
   getPlayStat,
+  getScoringAssistRanking,
   getTotalPasses,
   processData,
 } from "../../utils/utils";
@@ -118,7 +120,6 @@ const Main = () => {
           <div className={ss.chart}>
             {processedData && (
               <BarChart
-                title="종합평가"
                 data={processedData?.slice(-10)}
                 xAxisMobileFn={(row) => {
                   return row.title;
@@ -351,6 +352,21 @@ const Main = () => {
                     </div>
                   );
                 }}
+              />
+            </div>
+          </div>
+          <div className={ss.match_list}>
+            <div className={ss.title_box}>
+              <div className={ss.title}>
+                선수별 득점 및 도움
+              </div>
+            </div>
+            <div className={ss.content}>
+              <MatchList
+                data={getScoringAssistRanking(
+                  processedData
+                )}
+                colDef={COLUMN_GOALSCORED_GOAL_RESULT}
               />
             </div>
           </div>
