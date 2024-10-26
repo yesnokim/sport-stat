@@ -41,6 +41,7 @@ const BarChart = ({
   yAxisFns,
   labels,
   title,
+  stacked = false,
 }) => {
   const [isMobile, setIsMobile] = useState(false);
 
@@ -95,9 +96,11 @@ const BarChart = ({
           maxRotation: 90, // X축 레이블의 최대 회전
           minRotation: 45, // X축 레이블의 최소 회전
         },
+        stacked: stacked,
       },
       y: {
         beginAtZero: true, // Y축 0부터 시작
+        stacked: stacked,
       },
     },
   };
