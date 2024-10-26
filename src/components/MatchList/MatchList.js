@@ -59,7 +59,6 @@ export const COLUMN_DEFINITION_MATCH_RESULT = [
   {
     header: "결과",
     accessorFn: (row) => {
-      console.log("row.goalsScored", row.goalsScored);
       const scores = row.goalsScored?.length;
       const conceded = row.goalsConceded;
 
@@ -94,7 +93,6 @@ export const COLUMN_DEFINITION_MATCH_RESULT = [
   {
     header: "득점",
     accessorFn: (row) => {
-      console.log("row.goalsScored", row.goalsScored);
       return row.goalsScored?.length;
     },
   },
