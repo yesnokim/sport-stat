@@ -119,7 +119,7 @@ const Main = () => {
             {processedData && (
               <BarChart
                 title="종합평가"
-                data={processedData}
+                data={processedData?.slice(-10)}
                 xAxisMobileFn={(row) => {
                   return row.title;
                 }}
@@ -149,7 +149,7 @@ const Main = () => {
           <div className={ss.chart}>
             {processedData && (
               <MixedChart
-                data={processedData}
+                data={processedData?.slice(-10)}
                 xAxisMobileFn={(row) => {
                   return row.title;
                 }}
@@ -215,16 +215,19 @@ const Main = () => {
                 "패스 실패",
               ]}
               dataValues={_.values(
-                _.pick(getTotalPasses(processedData), [
-                  "forwardPass",
-                  "sidePass",
-                  "backPass",
-                  "failedPass",
-                ])
+                _.pick(
+                  getTotalPasses(processedData?.slice(-10)),
+                  [
+                    "forwardPass",
+                    "sidePass",
+                    "backPass",
+                    "failedPass",
+                  ]
+                )
               )}
               centerTitle={`${GAME_TO_SHOW}경기 패스성공률`}
               centerValue={`${
-                getTotalPasses(processedData)
+                getTotalPasses(processedData?.slice(-10))
                   ?.passSuccessRate
               }%`}
             />
@@ -232,7 +235,7 @@ const Main = () => {
           <div className={ss.chart}>
             <LineChart
               title="적극성"
-              data={processedData}
+              data={processedData?.slice(-10)}
               xAxisMobileFn={(row) => {
                 return row.title;
               }}

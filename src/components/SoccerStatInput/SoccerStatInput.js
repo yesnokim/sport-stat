@@ -4,6 +4,7 @@ import {
   setDoc,
   Timestamp,
 } from "firebase/firestore";
+import _ from "lodash";
 import { useEffect, useReducer, useState } from "react";
 import { FaYoutube } from "react-icons/fa";
 import { db } from "../../firebase";
@@ -13,10 +14,9 @@ import {
   calculateOverallRating,
   getPlayStat,
 } from "../../utils/utils";
+import DoughnutChart from "../DoughnutChart/DoughnutChart";
 import RadarChart from "../RadarChart/RadarChart";
 import ss from "./SoccerStatInput.module.scss";
-import DoughnutChart from "../DoughnutChart/DoughnutChart";
-import _ from "lodash";
 
 // 초기 상태 정의
 const initialState = {
@@ -739,24 +739,28 @@ const SoccerStatInput = ({
           {/* 득점 수 */}
           <div className={ss.stat_item}>
             <div className={ss.stat_title}>득점</div>
-            <button
-              className={ss.stat_btn}
-              onClick={() =>
-                handleRemoveGoal(
-                  state.goalsScored.length - 1
-                )
-              }
-              disabled={state.goalsScored.length === 0}>
-              -
-            </button>
+            {!isMobile && (
+              <button
+                className={ss.stat_btn}
+                onClick={() =>
+                  handleRemoveGoal(
+                    state.goalsScored.length - 1
+                  )
+                }
+                disabled={state.goalsScored.length === 0}>
+                -
+              </button>
+            )}
             <div className={ss.stat_value}>
               {state.goalsScored.length}
             </div>
-            <button
-              className={ss.stat_btn}
-              onClick={() => setShowGoalInput(true)}>
-              +
-            </button>
+            {!isMobile && (
+              <button
+                className={ss.stat_btn}
+                onClick={() => setShowGoalInput(true)}>
+                +
+              </button>
+            )}
           </div>
 
           {/* 득점 입력 */}
