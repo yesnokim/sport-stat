@@ -52,7 +52,8 @@ export const getPlayStat = (state) => {
   return {
     passSuccess,
     passTries,
-    passSuccessRate,
+    passSuccessRate:
+      passSuccessRate >= 0 ? passSuccessRate : 0,
     ballTouches,
     attackPoints,
   };
