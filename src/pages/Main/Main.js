@@ -29,6 +29,7 @@ import {
   processData,
 } from "../../utils/utils";
 import ss from "./Main.module.scss";
+import YouTubeIframePlayer from "../../components/YoutubeIframePlayer/YoutubeIframePlayer";
 
 const LOCAL_STORAGE_KEY_MATCH_LIST_TYPE =
   "main-local-match-list-type";
@@ -106,6 +107,9 @@ const Main = () => {
         return MATCH_COLUMN_TYPES.QUARTER;
     }
   }, [selectedMatchType]);
+
+  const isSessionType =
+    selectedMatchType === MATCH_LIST_TYPES.QUARTER;
 
   return (
     <div className={ss.bg}>
@@ -317,12 +321,18 @@ const Main = () => {
               data={getMatchData()}
               colDef={getMatchColumnDef()}
               renderSubComponent={({ row }) => {
+                console.log(row.original.videoUrl);
                 return (
                   <div className={ss.sub_render_row}>
                     <RadarChart
                       playerState={row.original}
                       playerName={row.original?.playerName}
                     />
+                    {isSessionType && (
+                      <YouTubeIframePlayer
+                        src={row.original.videoUrl}
+                      />
+                    )}
                   </div>
                 );
               }}
